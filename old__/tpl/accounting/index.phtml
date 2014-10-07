@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <title><?php echo $vars['meta']['title'];?></title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="copyright" content="" />
+		<meta name="Author-Corporate" content="Vitaliy Malyshev" />
+		<meta name="Publisher-Email" content="vitfollower@gmail.com" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <?php echo $vars['styles']; ?>
+        <?php echo $vars['scripts']; //?>
+	</head>
+<body>
+<div id="container">
+
+	<?php include(SITE_PATH.'includes/tpl/header.php'); ?>
+
+    <div id="content">
+    	<div class="h1000">
+
+    		<?php
+    			echo $vars['content'];
+    		?>
+
+		</div>
+	</div>
+    <div class="clear"></div>
+
+	     <div class="modal fade" id="edit-entry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">Редактировать</h4>
+		      </div>
+		      <div class="modal-body">
+		      		<input type="text" name="date" id="date-edit" value="" placeholder="Когда ?" />
+		        	<input type="text" name="name" id="name-edit" value="" placeholder="Что ?" />
+		    		<input type="text" id="sum-edit" name="amount" value=""  placeholder="Сколько ?"/>
+		    		<select name="types" id="types-edit"><?=$vars['types'];?></select>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+		        <button type="button" class="btn btn-primary" id="save-edit">Сохранить</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+    <div id="footer">
+		
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+AddDefaultCharset utf-8
+AddType text/x-component .htc
+Options +Includes +FollowSymLinks -Indexes
+DirectoryIndex index.php
+
+RewriteEngine on 
+RewriteBase /taras/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .*\.(txt|csv)$ index.php [R,NC] 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <title><?php echo $vars['meta']['title'];?></title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="copyright" content="" />
+		<meta name="Author-Corporate" content="Vitaliy Malyshev" />
+		<meta name="Publisher-Email" content="vitfollower@gmail.com" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <?php echo $vars['styles']; ?>
+        <?php echo $vars['scripts']; //?>
+	</head>
+<body>
+<div id="container">
+	<div id="header">
+		<div class="h1000">
+			<div id="login">
+				<?php
+					if(isset($_SESSION['user_id']) && $_SESSION['user_id']!='') { ?>
+
+						<p><span>[</span><?php echo $_SESSION['name']; ?><span>]</span></p>
+
+					<?php } else { ?>
+
+						<form method="post" action="/">
+							<input type="text" name="name" placeholder="Логин" />
+							<input type="password" name="pass" placeholder="Пароль" />
+							<button id="enter" type="submit">Вход</button>
+						</form>
+
+					<?php } ?>
+				
+			</div>
+		</div>
+    </div>
+</div>
+</body>
+</html>

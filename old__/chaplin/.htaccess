@@ -1,0 +1,6 @@
+AddDefaultCharset utf-8
+DirectoryIndex index.html
+
+RewriteEngine on 
+RewriteBase /chaplin/
+

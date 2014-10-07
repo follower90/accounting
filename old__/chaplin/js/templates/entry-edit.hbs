@@ -1,0 +1,35 @@
+<h2>Edit entry - {{name}}</h2>
+
+<a class="back" href="/chaplin/">Go back</a>
+
+<form id="edit-entry">
+    <fieldset>
+        <label>Date:</label>
+        <input type="date" class="date" name="date" value="{{date}}" />
+    </fieldset>
+
+    <fieldset>
+        <label>Name:</label>
+        <input type="text" class="name" name="name" value="{{name}}" />
+    </fieldset>
+
+    <fieldset>
+        <label>Type:</label>
+        <select class="category_id" id="category_id" >
+            {{#each types}}
+                    <option value="{{id}}"
+                        {{#ifequal id ../category_id}}
+                            selected="selected"
+                        {{/ifequal}}
+                    >{{name }}</option>
+            {{/each}}
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <label>Sum:</label>
+        <input type="number" class="sum" name="sum" value="{{sum}}" />
+    </fieldset>
+
+    <input type="submit" value="Save" />
+</form>
