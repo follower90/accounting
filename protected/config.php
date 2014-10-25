@@ -9,9 +9,9 @@ $DB_Charset = 'utf8';
 */
 
 $DB_Host = 'localhost';
-$DB_Name = 'u411577503_db';
-$DB_UserName = 'u411577503_user';
-$DB_Password = 'flwr666x';
+$DB_Name = 'accounting';
+$DB_UserName = 'user';
+$DB_Password = 'q1w2e3';
 $DB_Charset = 'utf8';
 
 /* * * * *  Tpl settings  * * * * */
