@@ -1,12 +1,5 @@
 <?php
 /*web*/
-/*
-$DB_Host = 'localhost';
-$DB_Name = 'accounting';
-$DB_UserName = 'root';
-$DB_Password = 'v6v6v6';
-$DB_Charset = 'utf8';
-*/
 
 $DB_Host = 'localhost';
 $DB_Name = 'accounting';

@@ -128,7 +128,7 @@
 							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($user_id));
 
 			$vars['statGotYear'] = $this->db->rows_key("
-							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum) as sum
+							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum)
 							FROM `Entry` e
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
@@ -136,7 +136,7 @@
 							GROUP BY DATE_FORMAT(e.date, '%Y')", array($user_id));
 
 			$vars['statSpentYear'] = $this->db->rows_key("
-							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum) as sum
+							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum)
 							FROM `Entry` e
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
