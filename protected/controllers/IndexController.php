@@ -111,7 +111,7 @@
 							GROUP BY e.category_id 
 							ORDER BY e.category_id, e.date ASC", array($user_id, $from, $to, 6, 7));
 
-			$statSpent = $this->db->rows_key("
+			$statSpent = $this->db->rows("
 							SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
 							FROM `Entry` e
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
