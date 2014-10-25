@@ -5,4 +5,4 @@ define [
 
   class Types extends Model
     # This model is intentionally left blank
-    url: 'http://myacc.bl.ee/api/types/action/list/'
+    url: 'http://myaccounting.tk/api/types/action/list/'

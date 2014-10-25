@@ -5,4 +5,4 @@ define [
 
   class User extends Model
     # This model is intentionally left blank
-    url: 'http://myacc.bl.ee/login'
+    url: 'http://myaccounting.tk/login'

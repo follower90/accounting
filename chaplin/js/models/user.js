@@ -12,7 +12,7 @@ define(['models/base/model'], function(Model) {
       return User.__super__.constructor.apply(this, arguments);
     }
 
-    User.prototype.url = 'http://myacc.bl.ee/login';
+    User.prototype.url = 'http://myaccounting.tk/login';
 
     return User;
 

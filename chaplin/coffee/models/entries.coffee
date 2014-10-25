@@ -7,4 +7,4 @@ define [
 
   class Entries extends Collection
     model: Entry
-    url: 'http://myacc.bl.ee/api/entry/action/list'
+    url: 'http://myaccounting.tk/api/entry/action/list'

@@ -8,9 +8,9 @@ define [
 
     url: ->
       if @.isNew
-        'http://myacc.bl.ee/api/entry/action/view/id/' + @.id
+        'http://myaccounting.tk/api/entry/action/view/id/' + @.id
       else
-        'http://myacc.bl.ee/api/entry/action/view/id/id/' + @.id
+        'http://myaccounting.tk/api/entry/action/view/id/id/' + @.id
 
 # initialize: (attributes, options) ->
 #   super

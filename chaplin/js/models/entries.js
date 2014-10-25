@@ -14,7 +14,7 @@ define(['chaplin', 'models/entry', 'models/base/collection'], function(Chaplin, 
 
     Entries.prototype.model = Entry;
 
-    Entries.prototype.url = 'http://myacc.bl.ee/api/entry/action/list';
+    Entries.prototype.url = 'http://myaccounting.tk/api/entry/action/list';
 
     return Entries;
 

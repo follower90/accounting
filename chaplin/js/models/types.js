@@ -12,7 +12,7 @@ define(['models/base/model'], function(Model) {
       return Types.__super__.constructor.apply(this, arguments);
     }
 
-    Types.prototype.url = 'http://myacc.bl.ee/api/types/action/list/';
+    Types.prototype.url = 'http://myaccounting.tk/api/types/action/list/';
 
     return Types;
 

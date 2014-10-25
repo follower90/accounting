@@ -14,9 +14,9 @@ define(['chaplin', 'models/base/model'], function(Chaplin, Model) {
 
     Entry.prototype.url = function() {
       if (this.isNew) {
-        return 'http://myacc.bl.ee/api/entry/action/view/id/' + this.id;
+        return 'http://myaccounting.tk/api/entry/action/view/id/' + this.id;
       } else {
-        return 'http://myacc.bl.ee/api/entry/action/view/id/id/' + this.id;
+        return 'http://myaccounting.tk/api/entry/action/view/id/id/' + this.id;
       }
     };
 
