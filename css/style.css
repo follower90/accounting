@@ -77,3 +77,8 @@ body {
 	padding-top: 7px !important;
 	padding-left: 33px !important;
 }
+
+h4 span {
+	font-size: 13px;
+	color: #555555;
+}
