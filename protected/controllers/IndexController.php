@@ -111,7 +111,7 @@
 							GROUP BY e.category_id 
 							ORDER BY e.category_id, e.date ASC", array($user_id, $from, $to, 6, 7));
 
-			$statSpent = $this->db->rows("
+			$statSpent = $this->db->rows_key("
 							SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
 							FROM `Entry` e
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
@@ -127,6 +127,21 @@
 							WHERE cat.type='+' AND e.user_id = ?
 							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($user_id));
 
+			$vars['statGotYear'] = $this->db->rows_key("
+							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum) as sum
+							FROM `Entry` e
+							LEFT JOIN `Category` cat ON e.category_id = cat.id
+
+							WHERE cat.type='+' AND e.user_id = ?
+							GROUP BY DATE_FORMAT(e.date, '%Y')", array($user_id));
+
+			$vars['statSpentYear'] = $this->db->rows_key("
+							SELECT DATE_FORMAT(e.date, '%Y'), SUM(e.sum) as sum
+							FROM `Entry` e
+							LEFT JOIN `Category` cat ON e.category_id = cat.id
+
+							WHERE cat.type='+' AND e.user_id = ?
+							GROUP BY DATE_FORMAT(e.date, '%Y')", array($user_id));
 
 			$vars['statSpent'] = array();
 			$vars['statGot'] = array();
