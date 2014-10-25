@@ -140,7 +140,7 @@
 							FROM `Entry` e
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
-							WHERE cat.type='+' AND e.user_id = ?
+							WHERE cat.type='-' AND e.user_id = ?
 							GROUP BY DATE_FORMAT(e.date, '%Y')", array($user_id));
 
 			//year stats
