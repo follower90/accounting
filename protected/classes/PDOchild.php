@@ -132,6 +132,6 @@ class PDOchild Extends PDO
 			$this->error($e,$pattern,$info,$vars);
 			return false;
 		}
-		return $sth->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_KEY_PAIR);
+		return $sth->fetchAll(PDO::FETCH_KEY_PAIR);
 	}
 }
