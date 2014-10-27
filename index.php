@@ -1,7 +1,7 @@
 <?php
 	//echo phpversion();
 	error_reporting(E_ALL);
-	if(version_compare(phpversion(), '5.1.0', '<') == true){die('PHP 5.1 Only');}
+	ini_set('display_errors', true);
 
 	define('SITE_PATH', dirname(__FILE__)."/");
 	define('CLASSES', dirname(__FILE__)."/protected/classes/");

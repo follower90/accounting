@@ -124,9 +124,6 @@ class ApiController extends BaseController
 
 	private function getEntries($user_id, $month = '', $year = '')
 	{
-	echo '123';
-		ini_set('display_errors', true);
-		
 		$dateStart = date("Y-m-d", strtotime(' -1 week'));
 		$dateEnd = date("Y-m-d");
 

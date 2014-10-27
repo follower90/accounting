@@ -1,7 +1,7 @@
 <?php
 /*web*/
 
-$DB_Host = 'localhost';
+$DB_Host = '162.220.12.86';
 $DB_Name = 'accounting';
 $DB_UserName = 'user';
 $DB_Password = 'q1w2e3';

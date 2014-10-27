@@ -11,7 +11,7 @@
 		function indexAction()
 		{
 			$view = new View($this->registry);
-			$user_id = $_SESSION['user_id'];
+			$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
 			$vars['lastweek'] = $this->db->rows("
 					SELECT e.*, cat.name as type, cat.type as d

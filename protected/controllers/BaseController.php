@@ -53,9 +53,11 @@ class BaseController{
 												'jquery.flot.canvas.min.js',
 												'jquery.flot.time.min.js',
 												'jquery.flot.pie.min.js'), 'scripts');
+		if(isset($_SESSION['user_id'])) {
+			$data['typesArray'] = $this->getTypes();
+			$data['types'] = $this->showTypes($data['typesArray']);
+		}
 
-		$data['typesArray'] = $this->getTypes();
-		$data['types'] = $this->showTypes($data['typesArray']);
 		return ($view->Render("index.phtml", $data));
 	}
 
