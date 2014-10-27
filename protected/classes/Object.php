@@ -55,12 +55,14 @@ class Object
 
 	public function save()
 	{
+		$updateFields = array();
+
 		foreach ($this->_object as $key => $value) {
 			if ($key != 'id') {
 				$updateFields[] = $key . "='" . $value."'";
 			}
 		}
-		
+
 		if ($this->_object['id']) {
 			$this->_db->query("UPDATE `$this->_table` SET " . implode(', ', $updateFields) . " WHERE id='" . $this->_object['id']. "'");
 		} else {

@@ -1,10 +1,11 @@
 <?php
 
-class LogoutController extends BaseController {
+class LogoutController extends BaseController
+{
 
 	protected $params;
 
-	function __construct ($registry, $params)
+	function __construct($registry, $params)
 	{
 		$this->registry = $registry;
 		parent::__construct($registry, $params);
@@ -14,7 +15,7 @@ class LogoutController extends BaseController {
 	{
 		$_SESSION['user_id'] = '';
 		$_SESSION['name'] = '';
-		setcookie('userid', '0', time()+2592000);
+		setcookie('userid', '0', time() + 2592000);
 
 		header("Location: / ");
 	}

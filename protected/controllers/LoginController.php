@@ -1,22 +1,24 @@
 <?php
-class LoginController extends BaseController {
-	
+
+class LoginController extends BaseController
+{
+
 	protected $params;
 	protected $db;
-	
+
 	function  __construct($registry, $params)
 	{
 		$this->registry = $registry;
 		parent::__construct($registry, $params);
 	}
-	
+
 	public function indexAction()
 	{
-		if(isset($_POST['login'], $_POST['password'])) {
+		if (isset($_POST['login'], $_POST['password'])) {
 
 			$login = trim($_POST['login']);
 			$password = trim($_POST['password']);
-		
+
 			$this->checkLogin($login, $password);
 		} else {
 			$this->logout();
@@ -25,17 +27,15 @@ class LoginController extends BaseController {
 
 	private function checkLogin($login, $pass)
 	{
-
 		$row = $this->db->row("SELECT id, name FROM `users` WHERE login=? and password=?", array($login, md5($pass)));
 
-		if($row)
-		{
+		if ($row) {
 			$_SESSION['user_id'] = $row['id'];
 			$_SESSION['name'] = $row['name'];
-			setcookie('userid', $row['id'], time()+2592000);
-		} 
-		else
+			setcookie('userid', $row['id'], time() + 2592000);
+		} else {
 			$row = array();
+		}
 
 		$this->sendResponse($row);
 	}
@@ -44,9 +44,9 @@ class LoginController extends BaseController {
 	{
 		unset($_SESSION['user_id']);
 		unset($_SESSION['name']);
-		setcookie('userid', '0', time()+2592000);
+		setcookie('userid', '0', time() + 2592000);
 
-		$resposne = array('logout'=>'true');
+		$response = array('logout' => 'true');
 		$this->sendResponse($response);
 	}
 

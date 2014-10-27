@@ -1,7 +1,7 @@
 <?php
 class Entry extends Object
 {
-	public function __construct($id)
+	public function __construct($id = null)
 	{
 		parent::__construct($id);
 	}
