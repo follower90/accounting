@@ -207,10 +207,12 @@
 				}
 			}
 
-			$vars['typesArray'] = $this->getTypes();
-			$vars['types'] = $this->showTypes($vars['typesArray']);
-			$data['content'] = $view->Render('main.phtml', $vars);
+			if (isset($_SESSION['user_id'])) {
+				$vars['typesArray'] = $this->getTypes();
+				$vars['types'] = $this->showTypes($vars['typesArray']);
+			}
 
+			$data['content'] = $view->Render('main.phtml', $vars);
 			return $this->Render($data);
 		}
 	}
