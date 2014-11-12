@@ -1,7 +1,7 @@
 <?php
 
 	error_reporting(E_ALL);
-	ini_set('display_errors', true);
+	ini_set('display_errors', false);
 	date_default_timezone_set('Europe/Kiev');
 
 	define('SITE_PATH', dirname(__FILE__)."/");
