@@ -63,10 +63,6 @@ body {
 	width: 500px;
 	height: 500px;
 }
-#profile .categories label, #profile .categories input[type='checkbox'] {
-	display: inline;
-	margin: 0;
-}
 .hidden {
 	display: none;
 }

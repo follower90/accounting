@@ -37,13 +37,14 @@ class BaseController
 		$view = new View($this->registry);
 		$data['meta']['title'] = 'Бухгалтерия 0.7.0 beta';
 
-		$data['styles'] = $view->Load(array('style.css',
-			'bootstrap.min.css',
-			'bootstrap-theme.css',
+		$data['styles'] = $view->Load(array(
+			'style.css',
+			'bootstrap.css',
 			'datepicker.css'
 		,), 'styles');
 
-		$data['scripts'] = $view->Load(array('jquery.min.js',
+		$data['scripts'] = $view->Load(array(
+			'jquery.min.js',
 			'scripts.js',
 			'bootstrap.min.js',
 			'datepicker.js',
@@ -51,6 +52,7 @@ class BaseController
 			'jquery.flot.canvas.min.js',
 			'jquery.flot.time.min.js',
 			'jquery.flot.pie.min.js'), 'scripts');
+
 		if (isset($_SESSION['user_id'])) {
 			$data['typesArray'] = $this->getTypes();
 			$data['types'] = $this->showTypes($data['typesArray']);

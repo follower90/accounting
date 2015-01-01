@@ -1,5 +1,7 @@
 <?php
-class errorController extends BaseController{
+
+class errorController extends BaseController
+{
 	
 	protected $params;
 	protected $db;
@@ -14,11 +16,9 @@ class errorController extends BaseController{
 	function indexAction()
 	{
 		header("HTTP/1.0 404 Not Found");
-		//header('Refresh: 3; url=/');
-        $view = new View($this->registry);
-		//$vars['translate'] = $this->translation;
+		$view = new View($this->registry);
+
 		$data['content'] = $view->Render('404.phtml');
 		return $this->Render($data);
 	}
 }
-?>

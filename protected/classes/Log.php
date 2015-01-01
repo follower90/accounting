@@ -1,4 +1,5 @@
 <?php
+
 class Log
 {
 	public static function echoLog ($logText)
@@ -7,12 +8,11 @@ class Log
 		echo $logText;
 		errorMail($logText);
 	}
-	
+
 	public static function writeLog ($logText,$logType) {
-		$body=$logType.' \n '.$logText;
+		$body = $logType.' \n '.$logText;
 		errorMail($body);
 		echo $body;
 		//echo '<font color="red">' . $logType . '<br>';		echo $logText . '</font>';
 	}
 }
-?>
