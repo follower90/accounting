@@ -35,7 +35,7 @@ class BaseController
 		$data = $param;
 
 		$view = new View($this->registry);
-		$data['meta']['title'] = 'Бухгалтерия 0.7.0 beta';
+		$data['meta']['title'] = 'Бухгалтерия 0.9.0';
 
 		$data['styles'] = $view->Load(array(
 			'style.css',
