@@ -41,14 +41,17 @@ body {
 #add-form {
 	position: relative;
 }
-#add-form input[type='text']{
+#add-form input[type='text'] {
 	margin: 2px 0;
 }
-#graphic-statistic, #category-statistic {
+#graphic-statistic {
 	width: 100%;
 	height: 500px;
 	margin: 30px 0;
 	float: left;
+}
+#category-statistic {
+	width: 100%;
 }
 .edit-row {
 	-webkit-transition: all 0.5s ease;
@@ -73,7 +76,6 @@ body {
 	padding-top: 7px !important;
 	padding-left: 33px !important;
 }
-
 h4 span {
 	font-size: 13px;
 	color: #888888;
