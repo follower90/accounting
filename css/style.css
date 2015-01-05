@@ -60,6 +60,14 @@ body {
 #add-form input[type='text'] {
 	margin: 2px 0;
 }
+.add-new-form input[type=text],
+.add-new-form select {
+	width: 100% !important;
+}
+.add-new-form .form-group {
+	padding-left: 7px;
+	padding-right: 7px;
+}
 #graphic-statistic {
 	width: 100%;
 	height: 500px;
