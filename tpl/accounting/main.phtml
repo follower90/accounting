@@ -11,13 +11,13 @@
 					</br>
 				<?php } ?>
 				</br>
-				<table class="table" width="100%" cellpadding="0" cellspacing="0">
+				<table class="table main-table" width="100%" cellpadding="0" cellspacing="0">
 					<thead>
 					<tr class="thead">
 						<th width="10%">Тип</th>
 						<th width="15%">Дата</th>
 						<th width="20%">Название</th>
-						<th width="20%">Категория</th>
+						<th class="cat-row" width="20%">Категория</th>
 						<th width="15%">Сумма</th>
 						<th width="16%"></th>
 					</tr>
@@ -32,7 +32,7 @@
 								<td class="icon-edit">'.$icon.'</td>
 								<td class="date-edit">'.$this->date_view($row['date'], "dd.mm.YY").'</td>
 								<td class="name-edit">'.$row['name'].'</td>
-								<td class="type-edit">'.$row['type'].'</td>
+								<td class="cat-row" type-edit">'.$row['type'].'</td>
 								<td class="sum-edit">'.$row['sum'].' ₴</td>
 								<td>
 									<a class="label label-primary" href="javascript:void(0);" onclick="editEntry('.$row['id'].');">редактировать</a>
