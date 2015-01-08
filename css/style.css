@@ -26,6 +26,22 @@ body {
 	width: 32% !important;
 	margin-right: 1%;
 }
+@media (max-width: 1000px) {
+	.year-table {
+		width: 48% !important;
+	}
+}
+@media (max-width: 700px) {
+        .year-table {
+                width: 100% !important;
+        }
+}
+@media (max-width: 550px) {
+        .main-table .cat-row {
+		display: none;
+        }
+}
+
 .year-table .table th {
 	font-size: 12px;
 }
@@ -43,6 +59,14 @@ body {
 }
 #add-form input[type='text'] {
 	margin: 2px 0;
+}
+.add-new-form input[type=text],
+.add-new-form select {
+	width: 100% !important;
+}
+.add-new-form .form-group {
+	padding-left: 7px;
+	padding-right: 7px;
 }
 #graphic-statistic {
 	width: 100%;
