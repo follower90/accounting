@@ -24,8 +24,8 @@ class ExportxlsController extends BaseController
 								DATE_FORMAT(e.`date`, '%Y') as year,  
 								DATE_FORMAT(e.`date`, '%m') as month
 
-								FROM `entries` e 
-								LEFT JOIN `categories` cat ON e.`category_id` = cat.`id`
+								FROM `Entry` e 
+								LEFT JOIN `Category` cat ON e.`category_id` = cat.`id`
 								WHERE e.`user_id`=?
 								ORDER BY e.`date` ASC", array($user_id));
 

@@ -72,17 +72,15 @@
 				<script type="text/javascript" src="../../js/follower.xcharts.js"></script>
 				<script language="javascript" type="text/javascript">
 					$(document).ready( function () {
-					var data = {
-						<?php
-							$first =  true;
-							foreach ($vars['catstats'] as $row) {
-								if(!$first) echo ',';
-								echo  "'".$row['catname']."': ".$row['sum']."";
-								$first = false;
-							}
-						?>
-					};
-					$('#category-statistic').xcharts({data: data, type: 'linear', height: 10 });
+						var data = { <?php
+										$first =  true;
+										foreach ($vars['catstats'] as $row) {
+											if(!$first) echo ',';
+											echo  "'".$row['catname']."': ".$row['sum']."";
+											$first = false;
+										}
+									?> };
+						$('#category-statistic').xcharts({data: data, type: 'linear', height: 10 });
 					});
 				</script>
 
