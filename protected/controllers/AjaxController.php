@@ -32,10 +32,9 @@ class AjaxController extends BaseController
 			$row = $this->db->row("SELECT id, name FROM `users` WHERE login=? and password=?", array($_POST['username'], md5($_POST['password'])));
 			if ($row) {
 				return json_encode(array('success' => true));
-			} else {
-				return json_encode(array('error' => false));
 			}
 		}
+		return json_encode(array('error' => false));
 	}
 
 	function editshowAction()
