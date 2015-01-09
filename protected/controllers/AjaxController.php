@@ -85,6 +85,53 @@ class AjaxController extends BaseController
 		return json_encode(array('error' => false));
 	}
 
+	function deleteitemAction()
+	{
+		$request = $this->request();
+		if($id = $this->logined()) {
+			$this->db->query("DELETE FROM `Entry` WHERE id=? and user_id=?", array($request['id'], $id));
+			return json_encode(array('success' => true));
+		}
+
+		return json_encode(array('error' => false));
+	}
+
+	function saveitemAction()
+	{
+		$request = $this->request();
+		if($id = $this->logined()) {
+
+			if ($request['id']) {
+				$this->db->query("
+						UPDATE `Entry` set date=?, name=?, category_id=?, sum=?
+						WHERE id=? and user_id=?",
+					array(
+						$request['date'], $request['name'], $request['category'],
+						$request['sum'], $request['id'], $id
+					)
+				);
+			} else {
+				$request['id'] = $this->db->insert_id("
+					INSERT INTO `Entry` set date=?, name=?, category_id=?, sum=?, user_id=?",
+					array($request['date'], $request['name'], $request['category'], $request['sum'], $id)
+				);
+			}
+
+			$data = $this->db->row("
+					SELECT e.*, cat.name as type, cat.type as d
+					FROM `Entry` e
+					LEFT JOIN `Category` cat ON e.category_id = cat.id
+
+					WHERE e.id = ?
+					AND e.user_id = ?",
+				array($request['id'], $id));
+
+			return json_encode(array('data' => $data));
+		}
+
+		return json_encode(array('error' => false));
+	}
+
 	function getcatsAction()
 	{
 		if($id = $this->logined()) {
