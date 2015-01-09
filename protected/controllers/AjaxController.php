@@ -26,15 +26,61 @@ class AjaxController extends BaseController
 		}
 	}
 
+	function request()
+	{
+		$request = file_get_contents('php://input');
+		return (array) json_decode($request);
+	}
+
 	function loginAction()
 	{
-		if (isset($_POST['username'], $_POST['password'])) {
-			$row = $this->db->row("SELECT id, name FROM `users` WHERE login=? and password=?", array($_POST['username'], md5($_POST['password'])));
+		if($this->logined()) {
+			return json_encode(array('success' => true));
+		}
+
+		return json_encode(array('error' => false));
+	}
+
+	function getcurrentmonthAction()
+	{
+		if($id = $this->logined()) {
+
+			$firstDayMonth = date("Y-m") . '-01';
+			$lastDayMonth = date("Y-m") . '-31';
+
+			$data = $this->db->rows("
+					SELECT e.*, cat.name as type, cat.type as d
+					FROM `Entry` e
+					LEFT JOIN `Category` cat ON e.category_id = cat.id
+
+					WHERE e.date BETWEEN ? AND ?
+					AND e.user_id = ?
+					ORDER BY e.id DESC",
+				array($firstDayMonth, $lastDayMonth, $id));
+
+			return json_encode(array('data' => $data));
+		}
+
+
+		return json_encode(array('error' => false));
+	}
+
+	private function logined()
+	{
+		$request = $this->request();
+
+		if (isset($request['username'], $request['password'])) {
+			$row = $this->db->row(
+				"SELECT id, name FROM `users` WHERE login=? and password=?",
+				array($request['username'], md5($request['password']))
+			);
+
 			if ($row) {
-				return json_encode(array('success' => true));
+				return $row['id'];
 			}
 		}
-		return json_encode(array('error' => false));
+
+		return false;
 	}
 
 	function editshowAction()

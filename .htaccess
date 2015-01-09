@@ -7,11 +7,9 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-<IfModule mod_headers.c>
-	Header set Access-Control-Allow-Origin "*"
-	Header set Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE"
-	Header set Access-Control-Allow-Headers "X-Requested-With, X-Requested-By,  Origin, Authorization, Accept, Content-Type, Pragma"
-</IfModule>
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE"
+Header set Access-Control-Allow-Headers "X-Requested-With, X-Requested-By,  Origin, Authorization, Accept, Content-Type, Pragma"
 
 RewriteRule .*\.(txt|csv)$ index.php [R,NC] 
 RewriteRule !((\.(js|ico|gif|jpg|png|ttf|woff|css|map|swf|cur|flv|pdf|JS|ICO|GIF|JPG|PNG|CSS|SWF|FLV|PDF))|^(.*)Include.inc.php$|^(.*).htm$|^(.*).xml$|export.php|captcha.php|thumb.php|ckfinder.html|connector.php|image.htm|index.html)$ index.php
