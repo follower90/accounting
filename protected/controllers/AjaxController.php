@@ -117,16 +117,7 @@ class AjaxController extends BaseController
 				);
 			}
 
-			$data = $this->db->row("
-					SELECT e.*, cat.name as type, cat.type as d
-					FROM `Entry` e
-					LEFT JOIN `Category` cat ON e.category_id = cat.id
-
-					WHERE e.id = ?
-					AND e.user_id = ?",
-				array($request['id'], $id));
-
-			return json_encode(array('data' => $data));
+			return json_encode(array('data' => true));
 		}
 
 		return json_encode(array('error' => false));
@@ -135,7 +126,10 @@ class AjaxController extends BaseController
 	function getcatsAction()
 	{
 		if($id = $this->logined()) {
-			$data = $this->db->rows("SELECT * FROM `Category`");
+			$data = $this->db->rows("SELECT c.* FROM `Category` c
+								 RIGHT JOIN `user_categories` uc ON c.`id` = uc.`category_id`
+								 WHERE uc.`user_id`=?
+								 ORDER BY c.`name`", array($id));
 			return json_encode(array('data' => $data));
 		}
 
