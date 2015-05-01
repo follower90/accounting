@@ -1,0 +1,11 @@
+{
+  "require": {
+    "follower/core": "dev-master"
+  },
+  "autoload": {
+    "classmap": [
+      "vendor/follower/core/src",
+      "protected"
+    ]
+  }
+}
