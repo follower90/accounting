@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c4097371-2267-4f2c-8313-52f55848a8da" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/protected/controllers/AjaxController.php" afterPath="$PROJECT_DIR$/protected/controllers/AjaxController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="accounting.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/protected/controllers/BaseController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-4.745098" vertical-offset="928" max-vertical-offset="3375">
-              <caret line="78" column="34" selection-start-line="78" selection-start-column="34" selection-end-line="81" selection-end-column="50" />
+              <caret line="78" column="45" selection-start-line="78" selection-start-column="45" selection-end-line="78" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -47,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="follower.xcharts.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="follower.xcharts.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/follower.xcharts.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1080">
-              <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.6362468" vertical-offset="0" max-vertical-offset="1080">
+              <caret line="33" column="29" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
               <folding>
                 <marker date="1420984324000" expanded="true" signature="983:995" placeholder="..." />
               </folding>
@@ -69,43 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AjaxController.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/protected/controllers/AjaxController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.91632926" vertical-offset="1496" max-vertical-offset="3165">
-              <caret line="145" column="5" selection-start-line="145" selection-start-column="5" selection-end-line="145" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery.min.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/jquery.min.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="135">
-              <caret line="3" column="36" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="28407" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="IndexController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protected/controllers/IndexController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="2100">
+            <state vertical-scroll-proportion="-5.0" vertical-offset="345" max-vertical-offset="2100">
               <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="45" selection-end-column="81" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".htaccess" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.htaccess">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="315">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -114,7 +83,7 @@
       <file leaf-file-name="LoginController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protected/controllers/LoginController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="208" max-vertical-offset="960">
+            <state vertical-scroll-proportion="-36.25" vertical-offset="0" max-vertical-offset="960">
               <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
               <folding />
             </state>
@@ -142,6 +111,7 @@
         <option value="$PROJECT_DIR$/js/follower.xcharts.js" />
         <option value="$PROJECT_DIR$/protected/controllers/BaseController.php" />
         <option value="$PROJECT_DIR$/protected/controllers/AjaxController.php" />
+        <option value="$PROJECT_DIR$/tpl/accounting/category.phtml" />
       </list>
     </option>
   </component>
@@ -275,7 +245,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="FullScreen" value="false" />
     <property name="LayoutCode.rearrangeEntriesPHP" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hh" />
     <property name="recentsLimit" value="5" />
   </component>
   <component name="RunManager" selected="PHP Script.ApiController.php">
@@ -311,7 +281,7 @@
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="ToolWindowManager">
     <frame x="89" y="100" width="1571" height="896" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -357,14 +327,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/protected/controllers/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="208" max-vertical-offset="960">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/new/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="13440" max-vertical-offset="14310">
@@ -652,40 +614,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protected/controllers/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="208" max-vertical-offset="960">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protected/controllers/IndexController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="2100">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="45" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/jquery.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-          <caret line="3" column="36" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="28407" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/scripts.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="2175">
@@ -694,12 +622,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/follower.xcharts.js">
+    <entry file="file://$PROJECT_DIR$/protected/controllers/AjaxController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1080">
-          <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.81781375" vertical-offset="2424" max-vertical-offset="3165">
+          <caret line="202" column="9" selection-start-line="202" selection-start-column="9" selection-end-line="202" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tpl/accounting/category.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24291497" vertical-offset="0" max-vertical-offset="741">
+          <caret line="12" column="10" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/jquery.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05882353" vertical-offset="0" max-vertical-offset="765">
+          <caret line="3" column="36" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="28407" />
           <folding>
-            <marker date="1420984324000" expanded="true" signature="983:995" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -712,19 +656,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protected/controllers/BaseController.php">
+    <entry file="file://$PROJECT_DIR$/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.745098" vertical-offset="928" max-vertical-offset="3375">
-          <caret line="78" column="34" selection-start-line="78" selection-start-column="34" selection-end-line="81" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.15686275" vertical-offset="0" max-vertical-offset="765">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protected/controllers/AjaxController.php">
+    <entry file="file://$PROJECT_DIR$/protected/controllers/IndexController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.91632926" vertical-offset="1496" max-vertical-offset="3165">
-          <caret line="145" column="5" selection-start-line="145" selection-start-column="5" selection-end-line="145" selection-end-column="5" />
+        <state vertical-scroll-proportion="-5.0" vertical-offset="345" max-vertical-offset="2100">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="45" selection-end-column="81" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protected/controllers/LoginController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-36.25" vertical-offset="0" max-vertical-offset="960">
+          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protected/controllers/BaseController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.745098" vertical-offset="928" max-vertical-offset="3375">
+          <caret line="78" column="45" selection-start-line="78" selection-start-column="45" selection-end-line="78" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/follower.xcharts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6362468" vertical-offset="0" max-vertical-offset="1080">
+          <caret line="33" column="29" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
+          <folding>
+            <marker date="1420984324000" expanded="true" signature="983:995" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
