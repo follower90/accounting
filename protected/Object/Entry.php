@@ -39,4 +39,3 @@ class Entry extends \Core\Object
 		return array_merge($fields, parent::fields());
 	}
 }
-

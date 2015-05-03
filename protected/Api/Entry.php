@@ -9,31 +9,37 @@ class Entry extends Api
 {
 	public function methodGet()
 	{
-		if ($examples = Orm::load('Entry', $this->request['id'])) {
-			return static::output($news->getValues());
+		if ($entry = Orm::load('Entry', $this->request['id'])) {
+			$result = $entry->getValues();
+			$result['cat'] = Orm::load('Category', $entry->getValue('category_id'))->getValue('name');
+
+			$this->output($result);
 		}
 
-		return static::output([]);
+		$this->output([]);
 	}
 
 	public function methodSave()
 	{
-		/*$request = $this->request();
-		if ($id = $this->logined()) {
+		$this->authorizer = new \Core\Authorize('User');
+		$user = $this->authorizer->getUser();
+
+		$this->db = \Core\Database\PDO::getInstance();
+
+		$request = $this->request();
+
+		if ($id = $user->getId()) {
 
 			if ($request['id']) {
 				$this->db->query("
 						UPDATE `Entry` set date=?, name=?, category_id=?, sum=?
 						WHERE id=? and user_id=?",
-					array(
-						$request['date'], $request['name'], $request['category'],
-						$request['sum'], $request['id'], $id
-					)
+					[date("Y-m-d", strtotime($request['date'])), $request['name'], $request['cat'], $request['sum'], $request['id'], $id]
 				);
 			} else {
 				$request['id'] = $this->db->insert_id("
 					INSERT INTO `Entry` set date=?, name=?, category_id=?, sum=?, user_id=?",
-					array($request['date'], $request['name'], $request['category'], $request['sum'], $id)
+					[date("Y-m-d", strtotime($request['date'])), $request['name'], $request['cat'], $request['sum'], $id]
 				);
 			}
 
@@ -44,60 +50,43 @@ class Entry extends Api
 
 					WHERE e.id = ?
 					AND e.user_id = ?",
-				array($request['id'], $id));
+				[$request['id'], $id]);
 
-			return json_encode(array('data' => $data));
+			$this->output($data);
 		}
 
-		return json_encode(array('error' => false));*/
+		$this->output([]);
 	}
 
 
-	public function methodList()
+	public function methodList($args)
 	{
+		$this->authorizer = new \Core\Authorize('User');
+		$user = $this->authorizer->getUser();
 
-		/*
-			function getcurrentmonthAction()
-	{
-		if ($id = $this->logined()) {
+		$entries = Orm::find('Entry', ['user_id', '>date<'], [$user->getId(), [$args['from'], $args['to']]], ['sort' => ['id', 'desc']])->getData();
+		$categories = Orm::find('Category')->getData();
 
-			$firstDayMonth = date("Y-m") . '-01';
-			$lastDayMonth = date("Y-m") . '-31';
+		array_walk($entries, function(&$entry) use (&$categories) {
+			$category = $categories[$entry['category_id']];
+			$entry['type'] = $category['type'];
+			$entry['category'] = $category['name'];
+			return $entry;
+		});
 
-			$data = $this->db->rows("
-					SELECT e.*, cat.name as type, cat.type as d
-					FROM `Entry` e
-					LEFT JOIN `Category` cat ON e.category_id = cat.id
-
-					WHERE e.date BETWEEN ? AND ?
-					AND e.user_id = ?
-					ORDER BY e.id DESC",
-				array($firstDayMonth, $lastDayMonth, $id));
-
-			return json_encode(array('data' => $data));
-		}
-
-		return json_encode(array('error' => false));
-	}
-	*/
-		$offset = $this->request['offset'];
-		$limit = $this->request['limit'];
-
-		if ($examples = Orm::find('Entry', [], [], ['offset' => $offset, 'limit' => $limit])) {
-			return static::output($examples->getData());
-		}
-
-		return static::output([]);
+		return $entries;
 	}
 
 	public function methodDelete()
 	{
-		$id = $this->request['id'];
-		$user_id = $_SESSION['user_id'];
+		$id = $this->request('id');
 
-		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$this->request['id'], $user_id])) {
+		$this->authorizer = new \Core\Authorize('User');
+		$user = $this->authorizer->getUser();
+
+		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$id, $user->getId()])) {
 			Orm::delete($entry);
-			return static::output(['success' => true]);
+			$this->output(['success' => true]);
 		}
 	}
 }

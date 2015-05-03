@@ -8,6 +8,9 @@ class Api
 {
 	public static function register()
 	{
-		Router::register(['User', 'get'], 'User', 'get', []);
+		Router::register(['Category.list', 'get'], 'Category', 'list', []);
+		Router::register(['Entry.get', 'post'], 'Entry', 'get', []);
+		Router::register(['Entry.save', 'post'], 'Entry', 'save', []);
+		Router::register(['Entry.delete', 'post'], 'Entry', 'delete', []);
 	}
 }

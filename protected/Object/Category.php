@@ -26,4 +26,17 @@ class Category extends \Core\Object
 
 		return array_merge($fields, parent::fields());
 	}
+
+	public function relations()
+	{
+		$relations = [
+			'user' => [
+				'multiple' => true,
+				'class' => 'User',
+				'table' => 'User__Category'
+			]
+		];
+		
+		return array_merge($relations, parent::fields());
+	}
 }

@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/follower90/framework-core.git",
-                "reference": "72a8ed8342f31eba21689cf5391fb48795383864"
+                "reference": "d932a493bd9d8fbb689a3217fa87a71a832f1309"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/follower90/framework-core/zipball/72a8ed8342f31eba21689cf5391fb48795383864",
-                "reference": "72a8ed8342f31eba21689cf5391fb48795383864",
+                "url": "https://api.github.com/repos/follower90/framework-core/zipball/d932a493bd9d8fbb689a3217fa87a71a832f1309",
+                "reference": "d932a493bd9d8fbb689a3217fa87a71a832f1309",
                 "shasum": ""
             },
             "require": {
@@ -37,7 +37,7 @@
                 }
             ],
             "description": "Core of my framework",
-            "time": "2015-05-01 14:05:44"
+            "time": "2015-05-03 11:14:07"
         }
     ],
     "packages-dev": [],

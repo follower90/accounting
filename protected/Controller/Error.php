@@ -4,7 +4,7 @@ namespace Accounting\Controller;
 
 class Error extends Base
 {
-	function methodIndex()
+	public function methodIndex()
 	{
 		header("HTTP/1.0 404 Not Found");
 

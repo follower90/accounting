@@ -9,8 +9,6 @@ use Core\App;
 
 class Base extends EntryPoint
 {
-	protected $_user;
-
 	public function getType()
 	{
 		return 'Controller';
@@ -23,13 +21,5 @@ class Base extends EntryPoint
 
 		$app = new App($this);
 		$app->run();
-		
-		$this->_authorize();
-	}
-
-	protected function _authorize()
-	{
-		$authorizer = new \Core\Authorize();
-		$this->_user = $authorizer->checkLoginState('User');
 	}
 }
