@@ -1,0 +1,53 @@
+<div class="panel panel-default">
+	<div class="panel-heading">Редактировать профиль</div>
+	<div class="panel-body">
+		<form method="post" class="form-horizontal">
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label class="control-label">Имя: </label>
+					<input class="form-control" type="text" name="name" value="<?php echo $vars['user']['name']; ?>" />
+				</div>
+				<div class="form-group">
+					<label>Логин: </label>
+					<input class="form-control" type="text" name="login" value="<?php echo $vars['user']['login']; ?>" />
+				</div>
+				<div class="form-group">
+					<label class="control-label">Пароль: </label>
+					<input class="form-control" type="text" name="password" value="">
+				</div>
+
+				<div class="form-group">
+					<label class="control-label">Категории: </label>
+				</div>
+
+					<?php
+						foreach ($vars['categories'] as $id => $name) {
+
+							$check = '';
+							foreach ($vars['user_categories'] as $idUserCategory) {
+								if ($id == $idUserCategory) {
+									$check = 'checked="checked"';
+									break;
+								}
+							}
+							
+							echo '<div class="checkbox">
+									<label for="c-' . $id . '">
+									<input type="checkbox" ' . $check . ' name="categories[]" value="' . $id . '" id="c-' . $id . '"> ' . $name . '
+									</label>
+								</div>';
+						}
+					?>
+					<br/>
+
+					<?php
+						if(isset($vars['message'])) echo $vars['message'];
+					?>
+
+					<div class="form-group">
+						<input type="submit" class="btn btn-default" name="save" value="Сохранить" />
+					</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title><?php echo $vars['title'];?></title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="copyright" content="" />
+		<meta name="Author-Corporate" content="Vitaliy Malyshev" />
+		<meta name="Publisher-Email" content="vitfollower@gmail.com" />
+		<link rel="shortcut icon" href="public/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="public/compiled/style.css">
+		<script src="public/compiled/scripts.js"></script>
+	</head>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Развернуть</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">Моя Бухгалтерия</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<?php echo $vars['usermenu']; ?>
+				</div>
+			</div>
+		</nav>
+		<?php echo $vars['content'] ?>
+	</div>
+</body>
+</html>
