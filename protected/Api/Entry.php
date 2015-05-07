@@ -7,6 +7,13 @@ use Core\Api as Api;
 
 class Entry extends Api
 {
+
+	public function __construct()
+	{
+		$this->authorizer = new Authorize('User');
+		$this->user = $this->authorizer->getUser();
+	}
+
 	public function methodGet()
 	{
 		if ($entry = Orm::load('Entry', $this->request['id'])) {
@@ -21,14 +28,12 @@ class Entry extends Api
 
 	public function methodSave()
 	{
-		$this->authorizer = new \Core\Authorize('User');
-		$user = $this->authorizer->getUser();
 
 		$this->db = \Core\Database\PDO::getInstance();
 
 		$request = $this->request();
 
-		if ($id = $user->getId()) {
+		if ($id = $this->user->getId()) {
 
 			if ($request['id']) {
 				$this->db->query("
@@ -61,10 +66,7 @@ class Entry extends Api
 
 	public function methodList($args)
 	{
-		$this->authorizer = new \Core\Authorize('User');
-		$user = $this->authorizer->getUser();
-
-		$entries = Orm::find('Entry', ['user_id', '>date<'], [$user->getId(), [$args['from'], $args['to']]], ['sort' => ['id', 'desc']])->getData();
+		$entries = Orm::find('Entry', ['user_id', '>date<'], [$this->user->getId(), [$args['from'], $args['to']]], ['sort' => ['id', 'desc']])->getData();
 		$categories = Orm::find('Category')->getData();
 
 		array_walk($entries, function(&$entry) use (&$categories) {
@@ -81,10 +83,7 @@ class Entry extends Api
 	{
 		$id = $this->request('id');
 
-		$this->authorizer = new \Core\Authorize('User');
-		$user = $this->authorizer->getUser();
-
-		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$id, $user->getId()])) {
+		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$id, $this->user->getId()])) {
 			Orm::delete($entry);
 			$this->output(['success' => true]);
 		}
