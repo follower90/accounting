@@ -63,16 +63,13 @@ class Index extends Base
 		$category = $this->request('types');
 
 		if ($date && $name && $sum && $category) {
-			\Core\Database\MySQL::insert(
-				'Entry', 
-				[
-					'name' => $name,
-					'user_id' => $this->user->getId(),
-					'category_id' => $category,
-					'date' => date("Y-m-d", strtotime($date)),
-					'sum' => floatval($sum),
-				]
-			);
+			\Core\Database\MySQL::insert('Entry', [
+				'name' => $name,
+				'user_id' => $this->user->getId(),
+				'category_id' => $category,
+				'date' => date("Y-m-d", strtotime($date)),
+				'sum' => floatval($sum),
+			]);
 		}
 
 		Router::redirect('/');
@@ -126,15 +123,15 @@ class Index extends Base
 	protected function resultsByYear($type)
 	{
 		$this->db = \Core\Database\PDO::getInstance();
+		$res = array();
 
-				$res = array();
 		$statSpentYear = $this->db->rows("
-							SELECT DATE_FORMAT(e.date, '%Y') as year, SUM(e.sum) as sum
-							FROM `Entry` e
-							LEFT JOIN `Category` cat ON e.category_id = cat.id
+			SELECT DATE_FORMAT(e.date, '%Y') as year, SUM(e.sum) as sum
+			FROM `Entry` e
+			LEFT JOIN `Category` cat ON e.category_id = cat.id
 
-							WHERE cat.type='".$type."' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y')", array($this->user->getId()));
+			WHERE cat.type='".$type."' AND e.user_id = ?
+			GROUP BY DATE_FORMAT(e.date, '%Y')", array($this->user->getId()));
 
 		foreach($statSpentYear as $row) {
 			$res[$row['year']] = $row['sum'];
@@ -152,20 +149,20 @@ class Index extends Base
 		$i = 0;
 
 		$statSpent = $this->db->rows("
-							SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
-							FROM `Entry` e
-							LEFT JOIN `Category` cat ON e.category_id = cat.id
+			SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
+			FROM `Entry` e
+			LEFT JOIN `Category` cat ON e.category_id = cat.id
 
-							WHERE cat.type='-' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
+			WHERE cat.type='-' AND e.user_id = ?
+			GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
 
 		$statGot = $this->db->rows("
-							SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
-							FROM `Entry` e
-							LEFT JOIN `Category` cat ON e.category_id = cat.id
+			SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
+			FROM `Entry` e
+			LEFT JOIN `Category` cat ON e.category_id = cat.id
 
-							WHERE cat.type='+' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
+			WHERE cat.type='+' AND e.user_id = ?
+			GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
 
 		foreach ($statSpent as $row) {
 			$row['monthName'] = \Core\Library\Date::getMonth($row['month']);
