@@ -11,18 +11,17 @@ class Profile extends Base
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->authorizer->getUser()) {
+		if (!$this->user) {
 			Router::redirect('404');
 		}
 	}
 
 	public function methodIndex()
 	{
-		$user = $this->authorizer->getUser();
-		$vars['user'] = Orm::load('User', $user->getId())->getValues();
+		$vars['user'] = Orm::load('User', $this->user->getId())->getValues();
 
 		$vars['categories'] = Orm::find('Category', [], [], ['sort' => ['id', 'asc']])->getHashMap('id', 'name');
-		$vars['user_categories'] = Orm::find('Category', ['user.User'], [$user->getId()], ['sort' => ['id', 'asc']])->getValues('id');
+		$vars['user_categories'] = Orm::find('Category', ['user.User'], [$this->user->getId()], ['sort' => ['id', 'asc']])->getValues('id');
 
 		$data['content'] = $this->view->render('public/templates/profile.phtml', $vars);
 		return $this->render($data);
@@ -36,6 +35,7 @@ class Profile extends Base
 			$name = $_POST['name'];
 			$login = $_POST['login'];
 			$password = trim($_POST['password']);
+			$user_id = $this->user->getId();
 
 			$this->db->query("UPDATE `users` SET `name`=?, `login`=? WHERE `id`=?", array($name, $login, $user_id));
 

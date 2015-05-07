@@ -62,14 +62,12 @@ class Index extends Base
 		$sum = $this->request('amount');
 		$category = $this->request('types');
 
-		$user = $this->authorizer->getUser();
-
 		if ($date && $name && $sum && $category) {
 			\Core\Database\MySQL::insert(
 				'Entry', 
 				[
 					'name' => $name,
-					'user_id' => $user->getId(),
+					'user_id' => $this->user->getId(),
 					'category_id' => $category,
 					'date' => date("Y-m-d", strtotime($date)),
 					'sum' => floatval($sum),
@@ -95,7 +93,6 @@ class Index extends Base
 
 	protected function bestMonth()
 	{
-		$user = $this->authorizer->getUser();
 		$this->db = \Core\Database\PDO::getInstance();
 
 		$best = $this->db->rows("
@@ -104,14 +101,13 @@ class Index extends Base
 			LEFT JOIN `Category` cat ON e.category_id = cat.id
 			WHERE cat.type='+' AND e.user_id = ?
 			GROUP BY DATE_FORMAT(e.date, '%Y%m')
-			ORDER BY sum DESC LIMIT 1", array($user->getId()));
+			ORDER BY sum DESC LIMIT 1", array($this->user->getId()));
 
 		return (count($best) >= 1) ? $best[0] : 0;
 	}
 
 	protected function stats($from, $to)
 	{
-		$user = $this->authorizer->getUser();
 		$this->db = \Core\Database\PDO::getInstance();
 
 		return $this->db->rows("
@@ -124,12 +120,11 @@ class Index extends Base
 			WHERE e.user_id = ? AND e.date BETWEEN ? AND ?
 			AND e.category_id NOT IN (?, ?)
 			GROUP BY e.category_id
-			ORDER BY e.category_id, e.date ASC", array($user->getId(), $from, $to, 6, 7));
+			ORDER BY e.category_id, e.date ASC", array($this->user->getId(), $from, $to, 6, 7));
 	}
 
 	protected function resultsByYear($type)
 	{
-		$user = $this->authorizer->getUser();
 		$this->db = \Core\Database\PDO::getInstance();
 
 				$res = array();
@@ -139,7 +134,7 @@ class Index extends Base
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
 							WHERE cat.type='".$type."' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y')", array($user->getId()));
+							GROUP BY DATE_FORMAT(e.date, '%Y')", array($this->user->getId()));
 
 		foreach($statSpentYear as $row) {
 			$res[$row['year']] = $row['sum'];
@@ -150,7 +145,6 @@ class Index extends Base
 
 	protected function getStats()
 	{
-		$user = $this->authorizer->getUser();
 		$this->db = \Core\Database\PDO::getInstance();
 
 		$got = array();
@@ -163,7 +157,7 @@ class Index extends Base
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
 							WHERE cat.type='-' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($user->getId()));
+							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
 
 		$statGot = $this->db->rows("
 							SELECT SUM(e.sum) as sum, DATE_FORMAT(e.date, '%Y') as year, DATE_FORMAT(e.date, '%m') as month
@@ -171,7 +165,7 @@ class Index extends Base
 							LEFT JOIN `Category` cat ON e.category_id = cat.id
 
 							WHERE cat.type='+' AND e.user_id = ?
-							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($user->getId()));
+							GROUP BY DATE_FORMAT(e.date, '%Y%m')", array($this->user->getId()));
 
 		foreach ($statSpent as $row) {
 			$row['monthName'] = \Core\Library\Date::getMonth($row['month']);

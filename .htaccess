@@ -4,10 +4,9 @@ Options +Includes +FollowSymLinks -Indexes
 DirectoryIndex index.php
 
 RewriteEngine on
-RewriteBase /
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^(.*)$ index.php [L,QSA]
-RewriteRule ^api/(.[a-zA-Z0-9\.\-_]+)(/(.*))?$ /api.php?e=$1&params=$3 [QSA,L]
+RewriteRule ^api/(.*)$ api.php [QSA,L]

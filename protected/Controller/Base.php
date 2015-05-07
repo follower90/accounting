@@ -9,10 +9,13 @@ use Core\App;
 class Base extends Controller
 {
 	protected $authorizer;
+	protected $user = false;
 
 	public function __construct()
 	{
 		$this->authorizer = new Authorize('User');
+		$this->user = $this->authorizer->getUser();
+
 		parent::__construct();
 	}
 
@@ -20,8 +23,8 @@ class Base extends Controller
 	{
 		$data['title'] = 'Моя бухгалтерия 2.0';
 
-		if ($user = $this->authorizer->getUser()) {
-			$data['usermenu'] = $this->view->render('public/templates/user/authorized.phtml', ['name' => $user->getValue('name')]);
+		if ($this->user) {
+			$data['usermenu'] = $this->view->render('public/templates/user/authorized.phtml', ['name' => $this->user->getValue('name')]);
 		} else {
 			$data['usermenu'] = $this->view->render('public/templates/user/login.phtml');
 		}
