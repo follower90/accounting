@@ -12,9 +12,9 @@ class Index extends Base
 		$data = [];
 		$data['content'] = '';
 
-		if ($user = $this->authorizer->getUser()) {
+		if ($this->user) {
 
-			$vars['categories'] = Orm::find('Category', ['user.User'], [$user->getId()], ['sort' => ['id', 'asc']])->getHashMap('id', 'name');
+			$vars['categories'] = Orm::find('Category', ['user.User'], [$this->user->getId()], ['sort' => ['id', 'asc']])->getHashMap('id', 'name');
 			$vars['new_entry'] = $this->view->render('public/templates/new_entry.phtml', $vars);
 
 			$month = $this->request('month');
