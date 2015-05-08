@@ -14,7 +14,6 @@ var path = {
 		'public/scripts/jquery.flot.time.min.js',
 		'public/scripts/jquery.flot.pie.min.js',
 		'public/scripts/follower.xcharts.js',
-		//'public/scripts/**/*.js',
 		'public/scripts/datepicker.js',
 		'public/scripts/scripts.js'
 	],
