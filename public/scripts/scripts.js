@@ -61,9 +61,9 @@ $.fn.refreshEntry = function (id) {
 				cl = 'tr-even';
 			} else cl = 'tr-odd';
 
-			var image = '<img src="/images/plus.png" alt="">';
+			var image = '<img src="/public/images/plus.png" alt="">';
 			if (data.type == '-') {
-				image = '<img src="/images/minus.png" alt="">';
+				image = '<img src="/public/images/minus.png" alt="">';
 			}
 
 			$('#tr-' + id + ' .icon-edit').html(image);

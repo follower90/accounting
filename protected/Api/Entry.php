@@ -3,6 +3,7 @@
 namespace Accounting\Api;
 
 use Core\Orm;
+use Core\Authorize;
 use Core\Api as Api;
 
 class Entry extends Api
@@ -16,14 +17,14 @@ class Entry extends Api
 
 	public function methodGet()
 	{
-		if ($entry = Orm::load('Entry', $this->request['id'])) {
+		if ($entry = Orm::load('Entry', $this->request('id'))) {
 			$result = $entry->getValues();
 			$result['cat'] = Orm::load('Category', $entry->getValue('category_id'))->getValue('name');
 
-			$this->output($result);
+			return $result;
 		}
 
-		$this->output([]);
+		return false;
 	}
 
 	public function methodSave()
@@ -57,10 +58,10 @@ class Entry extends Api
 					AND e.user_id = ?",
 				[$request['id'], $id]);
 
-			$this->output($data);
+			return $data;
 		}
 
-		$this->output([]);
+		return false;
 	}
 
 
@@ -85,7 +86,7 @@ class Entry extends Api
 
 		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$id, $this->user->getId()])) {
 			Orm::delete($entry);
-			$this->output(['success' => true]);
+			return true;
 		}
 	}
 }

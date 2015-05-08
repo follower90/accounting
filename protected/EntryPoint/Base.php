@@ -9,15 +9,12 @@ use Core\App;
 
 class Base extends EntryPoint
 {
-	public function getType()
-	{
-		return 'Controller';
-	}
-
 	public function init()
 	{
 		Config::set('site.language', 'ru');
 		Routes::register();
+
+		$this->setLib('\Accounting\Controller');
 
 		$app = new App($this);
 		$app->run();
