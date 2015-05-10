@@ -4,7 +4,7 @@
   },
   "autoload": {
     "classmap": [
-      "vendor/follower/core/src",
+      "vendor/follower/core/backend",
       "protected"
     ]
   }

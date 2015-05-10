@@ -36,7 +36,7 @@ class Category extends \Core\Object
 				'table' => 'User__Category'
 			]
 		];
-		
-		return array_merge($relations, parent::fields());
+
+		return $relations;
 	}
 }
