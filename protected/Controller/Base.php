@@ -29,6 +29,6 @@ class Base extends Controller
 			$data['usermenu'] = $this->view->render('public/templates/user/login.phtml');
 		}
 
-		echo $this->view->render('public/templates/layout.phtml', $data);
+		return $this->view->render('public/templates/layout.phtml', $data);
 	}
 }

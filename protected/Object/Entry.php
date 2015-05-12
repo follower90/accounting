@@ -38,4 +38,18 @@ class Entry extends \Core\Object
 
 		return array_merge($fields, parent::fields());
 	}
+
+	public function relations()
+	{
+		return [
+			'user' => [
+				'field' => 'user_id',
+				'class' => 'User'
+			],
+			'category' => [
+				'field' => 'category_id',
+				'class' => 'Category'
+			]
+		];
+	}
 }

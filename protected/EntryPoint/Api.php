@@ -33,6 +33,11 @@ class Api extends EntryPoint
 	public function output($data)
 	{
 		header('Content-Type: application/json');
+
+		if ($this->debug()) {
+			header('Content-Type: text/html');
+		}
+
 		return json_encode($data);
 	}
 }

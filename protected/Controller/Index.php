@@ -13,7 +13,6 @@ class Index extends Base
 		$data['content'] = '';
 
 		if ($this->user) {
-
 			$vars['categories'] = Orm::find('Category', ['user.User'], [$this->user->getId()], ['sort' => ['id', 'asc']])->getHashMap('id', 'name');
 			$vars['new_entry'] = $this->view->render('public/templates/new_entry.phtml', $vars);
 
@@ -23,13 +22,13 @@ class Index extends Base
 			if ($month && $year) {
 				$dateFrom = $year . '-' . $month . '-01';
 				$dateTo = $year . '-' . $month . '-31';
-				$vars['archiveDate'] = \Core\Library\Date::getMonth($month) .' ' . $year;
+				$vars['archiveDate'] = \Core\Library\Date::getMonth($month) . ' ' . $year;
 			} else {
 				$dateFrom = date("Y-m") . '-01';
 				$dateTo = date("Y-m") . '-31';
 			}
 
-			$entries = $this->callApi('Accounting.Api.Entry:list', ['from' => $dateFrom, 'to' => $dateTo]);
+			$entries = $this->execute('Accounting.Api.Entry:list', ['from' => $dateFrom, 'to' => $dateTo]);
 			$vars['entries_table'] = $this->view->render('public/templates/entries_table.phtml', ['entries' => $entries, 'categories' => $vars['categories']]);
 
 			$vars['getThisMonth'] = $this->monthSummary($entries, '+');
@@ -79,7 +78,7 @@ class Index extends Base
 	{
 		$sum = 0;
 
-		array_walk($entries, function(&$entry) use (&$sum, $type) {
+		array_walk($entries, function (&$entry) use (&$sum, $type) {
 			if ($entry['type'] == $type) {
 				$sum += $entry['sum'];
 			}
@@ -130,10 +129,10 @@ class Index extends Base
 			FROM `Entry` e
 			LEFT JOIN `Category` cat ON e.category_id = cat.id
 
-			WHERE cat.type='".$type."' AND e.user_id = ?
+			WHERE cat.type='" . $type . "' AND e.user_id = ?
 			GROUP BY DATE_FORMAT(e.date, '%Y')", array($this->user->getId()));
 
-		foreach($statSpentYear as $row) {
+		foreach ($statSpentYear as $row) {
 			$res[$row['year']] = $row['sum'];
 		}
 
@@ -168,23 +167,23 @@ class Index extends Base
 			$row['monthName'] = \Core\Library\Date::getMonth($row['month']);
 			$push = false;
 			foreach ($statGot as $row2) {
-				if($row['year']==$row2['year']) {
-					if($row['month']==$row2['month']) {
+				if ($row['year'] == $row2['year']) {
+					if ($row['month'] == $row2['month']) {
 						array_push($got, $row2);
 						$push = true;
 					}
 				}
 			}
 
-			if(!$push) {
-				array_push($got, array('month'=> $row['month'], 'monthName' => $row['monthName'], 'year'=>$row['year'], 'sum'=>0));
+			if (!$push) {
+				array_push($got, array('month' => $row['month'], 'monthName' => $row['monthName'], 'year' => $row['year'], 'sum' => 0));
 			}
 
 			array_push($spent, $row);
 			$i++;
 		}
 
-		return array ('got' => $got, 'spent' => $spent, 'gotRaw' => $statGot, 'spentRaw' => $statSpent);
+		return array('got' => $got, 'spent' => $spent, 'gotRaw' => $statGot, 'spentRaw' => $statSpent);
 	}
 
 	protected function toJSON($array)

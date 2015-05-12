@@ -15,9 +15,9 @@ class Entry extends Api
 		$this->user = $this->authorizer->getUser();
 	}
 
-	public function methodGet()
+	public function methodGet($args)
 	{
-		if ($entry = Orm::load('Entry', $this->request('id'))) {
+		if ($entry = Orm::load('Entry', $args['id'])) {
 			$result = $entry->getValues();
 			$result['cat'] = Orm::load('Category', $entry->getValue('category_id'))->getValue('name');
 
@@ -27,12 +27,9 @@ class Entry extends Api
 		return false;
 	}
 
-	public function methodSave()
+	public function methodSave($args)
 	{
-
 		$this->db = \Core\Database\PDO::getInstance();
-
-		$request = $this->request();
 
 		if ($id = $this->user->getId()) {
 
@@ -40,12 +37,12 @@ class Entry extends Api
 				$this->db->query("
 						UPDATE `Entry` set date=?, name=?, category_id=?, sum=?
 						WHERE id=? and user_id=?",
-					[date("Y-m-d", strtotime($request['date'])), $request['name'], $request['cat'], $request['sum'], $request['id'], $id]
+					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $args['id'], $id]
 				);
 			} else {
 				$request['id'] = $this->db->insert_id("
 					INSERT INTO `Entry` set date=?, name=?, category_id=?, sum=?, user_id=?",
-					[date("Y-m-d", strtotime($request['date'])), $request['name'], $request['cat'], $request['sum'], $id]
+					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $id]
 				);
 			}
 
@@ -56,7 +53,7 @@ class Entry extends Api
 
 					WHERE e.id = ?
 					AND e.user_id = ?",
-				[$request['id'], $id]);
+				[$args['id'], $id]);
 
 			return $data;
 		}
@@ -80,11 +77,9 @@ class Entry extends Api
 		return $entries;
 	}
 
-	public function methodDelete()
+	public function methodDelete($args)
 	{
-		$id = $this->request('id');
-
-		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$id, $this->user->getId()])) {
+		if ($entry = Orm::findOne('Entry', ['id', 'user_id'], [$args['id'], $this->user->getId()])) {
 			Orm::delete($entry);
 			return true;
 		}
