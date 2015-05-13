@@ -10,6 +10,8 @@ class Client
 	{
 		Router::register(['/', 'get'], 'Index', 'index', []);
 
+		Router::register(['/test', 'get'], 'Test', 'test', []);
+
 		Router::register(['/add', 'post'], 'Index', 'newEntry', []);
 		
 		Router::register(['/login', 'post'], 'User', 'login', []);
