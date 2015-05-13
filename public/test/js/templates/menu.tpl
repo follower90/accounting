@@ -1,0 +1,1 @@
+<div>inline widget - {{test}}</div>
