@@ -1,13 +1,10 @@
 var path = require('path');
 var gulp = require('gulp');
 var concat = require('gulp-concat');
-var using = require('gulp-using');
-var insert = require('gulp-insert');
-var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
 
-var path = {
+var paths = {
 	scripts: [
 		'public/scripts/jquery.min.js',
 		'public/scripts/bootstrap.min.js',
@@ -34,22 +31,19 @@ gulp.task('scripts', function() {
 
 	// Minify all JavaScript code
 
-	return gulp.src(path.scripts)
-		.pipe(sourcemaps.init())
+	return gulp.src(paths.scripts)
 		.pipe(concat('scripts.js'))
 		.pipe(uglify())
-		.pipe(gulp.dest(path.compiled));
+		.pipe(gulp.dest(paths.compiled));
 });
 
 gulp.task('test', function() {
 
 	// Minify all JavaScript code
 
-	return gulp.src(path.core.concat(path.mycode))
-		.pipe(sourcemaps.init())
+	return gulp.src(paths.core.concat(paths.mycode))
 		.pipe(concat('test.js'))
-		.pipe(uglify())
-		.pipe(gulp.dest(path.compiled));
+		.pipe(gulp.dest(paths.compiled));
 });
 
 
@@ -57,10 +51,10 @@ gulp.task('styles', function() {
 
 	// Compile Stylus styles to CSS
 
-	return gulp.src(path.styles)
+	return gulp.src(paths.styles)
 		.pipe(concat('style.css'))
 		.pipe(autoprefixer('last 3 versions'))
-		.pipe(gulp.dest(path.compiled));
+		.pipe(gulp.dest(paths.compiled));
 });
 
 gulp.task('build', ['styles', 'scripts']);
