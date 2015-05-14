@@ -1,5 +1,6 @@
 <div>
-	<h3>Main page</h3>
-	<div id="menu"> </div>
-	<p>{{name}}</p>
+	<h3>Главная страница</h3>
+	<p>Привет</p>
+	<div id="menu"></div>
+	<p>Имя: {{name}}</p>
 </div>

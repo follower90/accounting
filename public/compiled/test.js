@@ -3,14 +3,13 @@
 
 		widgets: {},
 		modules: {},
-		templates: {},
+		options: {},
 
 		module: function (name, component) {
 			this.modules[name] = component;
 		},
 
 		widget: function (name, widget) {
-
 			this.widgets[name] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), widget);
 			this.widgets[name].inlineWidgets = {};
 
@@ -24,7 +23,6 @@
 		error: function(text) {
 			console.error('vfDebugger: ' + text);
 		},
-
 
 		utils: {
 			extend: function (obj1, obj2) {
@@ -43,22 +41,17 @@
 				return obj1;
 			},
 
-			loadTemplate: function(template) {
-				var html = vf.modules.Api.get('public/test/js/templates/' + template + '.tpl'),
-					stringContainingXMLSource = html.responseText;
-
-				var parser = new DOMParser();
-				dom = parser.parseFromString(stringContainingXMLSource, "application/xml");
-				console.log(dom.documentElement.innerHTML);
-				return dom.documentElement.innerHTML;
-
+			loadTemplate: function(template, callback) {
+				vf.modules.Api.get(vf.options.templates + template + '.tpl', 'text/html')
+					.response(function(html) {
+						callback(html);
+					});
 			},
 
 			render: function (template, vars) {
 				for (var i in vars) {
 					template = template.replace('{{' + i + '}}', vars[i]);
 				}
-
 
 				return template;
 			}
@@ -78,154 +71,219 @@
 	window.vf = vf;
 })();
 
-(function (vf) {
-	vf.module('Api', {
+vf.module('Api', {
 
-		get: function (url) {
-			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.open('GET', url, false);
-			xmlHttp.send(null);
+	get: function (url, type) {
+		this._request(url, 'GET');
+		this._type = type;
+		return this;
+	},
 
-			return xmlHttp;
-		},
+	post: function (url, type, params) {
+		this._request(url, 'POST', params);
+		this._type = type;
+		return this;
+	},
 
-		post: function (url, params) {
-			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.open('POST', url, false);
-			xmlHttp.send(new FormData(params));
+	response: function(callback) {
+		this._callback = callback;
+	},
 
-			return xmlHttp;
+	_request: function(url, type, callback, params) {
+		var xmlHttp = new XMLHttpRequest(),
+			api = this;
+
+		switch (type) {
+			case 'GET':
+				xmlHttp.open('GET', url, true);
+				xmlHttp.send(null);
+				break;
+
+			case 'POST':
+				xmlHttp.open('POST', url, true);
+				xmlHttp.send(new FormData(params));
+				break;
 		}
-	});
-})(vf);
 
-(function (vf) {
-	vf.module('Router', {
+		xmlHttp.onreadystatechange = function() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				if (api._callback) {
+						switch(api._type) {
+							case 'text/html':
+								var parser = new DOMParser();
+								var result  = parser.parseFromString(xmlHttp.responseText, "text/html");
+								break;
+							default:
+								result = xmlHttp;
+								break;
+						}
 
-		routesMap: {},
-
-		routes: function (map) {
-			this.routesMap = vf.utils.extend(this.routesMap, map);
-		},
-
-		run: function () {
-			for (var url in this.routesMap) {
-
-				var args = this._matches(url, window.location.hash);
-
-				if (args) {
-					var route = this.routesMap[url];
-
-					var params = route.params || {},
-						widget = vf.widgets[route.page];
-
-					params = vf.utils.extend(args, params);
-
-					if (widget) {
-						widget.load(params);
-						widget.render();
-					} else {
-						vf.error('Widget: ' + route.page + ' not found');
-					}
+						api._result = api._callback(result);
 				}
 			}
-		},
+		};
+	}
+});
 
-		_matches: function (patt, url) {
-			if (url == '#/') {
-				url = '';
+vf.module('Event', {
+	events: {},
+	register: function (event, callback) {
+		this.events.push({
+			alias: event,
+			callback: callback
+		});
+	},
+
+	trigger: function(event) {
+		for (var i in this.events) {
+			if (event == events[i].alias) {
+				events[i].callback();
+				return;
 			}
+		}
+	}
+});
 
-			var parts = patt.split('/'),
-				urlParts = url.split('/'),
-				args = [];
+vf.module('Router', {
+	routesMap: {},
 
-			if (parts.length != urlParts.length) {
-				return false;
-			}
+	routes: function (map) {
+		this.routesMap = vf.utils.extend(this.routesMap, map);
+	},
 
-			for (var i = 0; i < parts.length; i++) {
-				if (parts[i] != urlParts[i]) {
-					if (parts[i][0] != ':') {
-						return false;
-					}
+	run: function () {
+		for (var url in this.routesMap) {
 
-					var param = parts[i].slice(1);
-					args[param] = urlParts[i];
+			var args = this._matches(url, window.location.hash);
+
+			if (args) {
+				var route = this.routesMap[url];
+
+				var params = route.params || {},
+					widget = vf.widgets[route.page];
+
+				params = vf.utils.extend(args, params);
+
+				if (widget) {
+					widget.load(params);
+					widget.render();
+				} else {
+					vf.error('Widget: ' + route.page + ' not found');
 				}
 			}
-
-			return args;
 		}
-	});
+	},
 
-})(vf);
+	_matches: function (patt, url) {
+		if (url == '') url = '#/';
+
+		var parts = patt.split('/'),
+			urlParts = url.split('/'),
+			args = [];
+
+		if (parts.length != urlParts.length) {
+			return false;
+		}
+
+		for (var i = 0; i < parts.length; i++) {
+			if (parts[i] != urlParts[i]) {
+				if (parts[i][0] != ':') {
+					return false;
+				}
+
+				var param = parts[i].slice(1);
+				args[param] = urlParts[i];
+			}
+		}
+
+		return args;
+	}
+});
+
 
 window.onload = function () {
 	vf.modules.Router.run();
 };
 
-(function (vf) {
-	vf.module('Widget', {
+vf.module('Widget', {
 
-		container: '',
-		template: '',
-		templateOptions: {},
+	container: '',
+	template: '',
+	templateOptions: {},
 
-		setTemplateOptions: function(obj) {
-			this.templateOptions = obj;
-		},
+	setTemplateOptions: function(obj) {
+		this.templateOptions = obj;
+	},
 
-		load: function() {
-		},
+	load: function() {
+	},
 
-		render: function () {
-			var container = vf.dom.find1(this.container);
-			if (container) {
-				var template = vf.utils.loadTemplate(this.template),
-					rendered = vf.utils.render(template, this.templateOptions);
+	render: function () {
+		var container = vf.dom.find1(this.container),
+			_w = this;
 
+		if (container) {
+			vf.utils.loadTemplate(this.template, function(template) {
+				var rendered = vf.utils.render(template.firstChild.innerHTML, _w.templateOptions);
 				container.innerHTML = rendered;
-			}
+				_w.renderInlineWidgets();
+			});
+		}
+	},
 
-			this._renderInlineWidgets();
-		},
+	renderInlineWidgets: function() {
+		for (var alias in this.inlineWidgets) {
+			var widget = this.inlineWidgets[alias];
 
-		_renderInlineWidgets: function() {
-			for (var alias in this.inlineWidgets) {
-				var widget = this.inlineWidgets[alias];
-
-				if (widget) {
-					widget.load();
-					widget.render();
-				}
+			if (widget) {
+				widget.load();
+				widget.render();
 			}
 		}
-	});
-})(vf);
-
-(function (vf) {
-	vf.widget('Page', {
-
-		container: '.container',
-		template: 'page',
-		widgets: {
-			simple: {
-				container: '#menu',
-				template: 'menu',
-				load: function () {
-					this.setTemplateOptions({test: 'How?'});
-				}
-			}
-		},
-
-		load: function () {
-			this.setTemplateOptions({name: 'That\'s magic'});
-		}
-
-	});
-})(vf);
+	}
+});
 
 vf.modules.Router.routes({
-	'': {page: 'Page'}
+	'#/': {page: 'Page'},
+	'#/test': {page: 'Test'}
+});
+
+vf.options.templates = 'public/test/js/templates/';
+
+vf.widget('Page', {
+
+	container: '.container',
+	template: 'page',
+	widgets: {
+		menu: {
+			container: '#menu',
+			template: 'menu',
+			load: function () {
+				this.setTemplateOptions({text: 'КАКОЙ_ТО_ТАМ_ТЕКСТ'});
+			}
+		}
+	},
+
+	load: function () {
+		this.setTemplateOptions({name: 'Василий'});
+	}
+});
+
+vf.widget('Test', {
+
+	container: '.container',
+	template: 'page',
+	widgets: {
+		menu: {
+			container: '#menu',
+			template: 'menu',
+			load: function () {
+				this.setTemplateOptions({text: 'Текст 2'});
+			}
+		}
+	},
+
+	load: function () {
+		this.setTemplateOptions({name: 'ТЕСТ'});
+	}
 });

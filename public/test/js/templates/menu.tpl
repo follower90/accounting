@@ -1,1 +1,1 @@
-<div>inline widget - {{test}}</div>
+<div>Выводим текст - {{text}}</div>
