@@ -244,8 +244,7 @@ vf.module('Widget', {
 });
 
 vf.modules.Router.routes({
-	'#/': {page: 'Page'},
-	'#/test': {page: 'Test'}
+	'#/': {page: 'Page'}
 });
 
 vf.options.templates = 'public/test/js/templates/';
@@ -259,31 +258,12 @@ vf.widget('Page', {
 			container: '#menu',
 			template: 'menu',
 			load: function () {
-				this.setTemplateOptions({text: 'КАКОЙ_ТО_ТАМ_ТЕКСТ'});
+				this.setTemplateOptions({text: 'some text'});
 			}
 		}
 	},
 
 	load: function () {
-		this.setTemplateOptions({name: 'Василий'});
-	}
-});
-
-vf.widget('Test', {
-
-	container: '.container',
-	template: 'page',
-	widgets: {
-		menu: {
-			container: '#menu',
-			template: 'menu',
-			load: function () {
-				this.setTemplateOptions({text: 'Текст 2'});
-			}
-		}
-	},
-
-	load: function () {
-		this.setTemplateOptions({name: 'ТЕСТ'});
+		this.setTemplateOptions({name: 'Vasya'});
 	}
 });

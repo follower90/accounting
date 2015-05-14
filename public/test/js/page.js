@@ -7,12 +7,12 @@ vf.widget('Page', {
 			container: '#menu',
 			template: 'menu',
 			load: function () {
-				this.setTemplateOptions({text: 'КАКОЙ_ТО_ТАМ_ТЕКСТ'});
+				this.setTemplateOptions({text: 'some text'});
 			}
 		}
 	},
 
 	load: function () {
-		this.setTemplateOptions({name: 'Василий'});
+		this.setTemplateOptions({name: 'Vasya'});
 	}
 });
