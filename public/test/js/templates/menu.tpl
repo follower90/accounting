@@ -1,1 +1,1 @@
-<div>Выводим текст - {{text}}</div>
+<div>Some text - {{text}}</div>
