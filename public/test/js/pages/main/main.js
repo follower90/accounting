@@ -1,7 +1,7 @@
 vf.widget('Main', {
 
 	container: '#container',
-	template: 'main/new',
+	template: 'main/main',
 	widgets: {
 		newEntry: {
 			widget: 'NewEntry'
