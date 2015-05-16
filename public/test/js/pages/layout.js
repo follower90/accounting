@@ -14,7 +14,7 @@ vf.widget('Layout', {
 				}
 			};
 		} else {
-			vf.modules.Api.get('/api/User.auth', 'json', function (data) {
+			vf.modules.Api.get('/api.php?method=User.auth', 'json', function (data) {
 				vf.user = data;
 				this.widgets = {
 					menu: {

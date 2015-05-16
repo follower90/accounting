@@ -22,8 +22,6 @@ vf.widget('NewEntry', {
 		}
 	},
 
-	categoriesApiURL: '/api/Category.list',
-
 	beforeRender: function () {
 
 		if (!this.categories) {
@@ -32,7 +30,7 @@ vf.widget('NewEntry', {
 				.categories
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.modules.Api.get(this.categoriesApiURL, 'json', function (data) {
+			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
 				this
 					.inlineWidgets
 					.categories
