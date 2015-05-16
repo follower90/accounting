@@ -25,8 +25,9 @@ vf.widget('Layout', {
 					this.widgets.sitePage = {
 						widget: params['page']
 					};
+					this.activate(params);
 				}
-				this.activate(params);
+
 			}.bind(this));
 		}
 	}
