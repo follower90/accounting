@@ -4,6 +4,6 @@ vf.widget('EditProfile', {
 	template: 'profile/form',
 
 	beforeRender: function () {
-		this.setTemplateOptions({name: 'Vitaliy Malyshev', login: 'follower'});
+		this.setTemplateOptions({name: vf.user.name, login: vf.user.login });
 	}
 });

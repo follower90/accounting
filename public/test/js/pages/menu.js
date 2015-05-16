@@ -1,9 +1,12 @@
 vf.widget('Menu', {
 
 	container: '#menu',
-	template: 'menu',
+	template: 'menu/unathorized',
 
-	beforeRender: function () {
-		this.setTemplateOptions({name: 'Vitaliy Malyshev'});
+	beforeActivate: function () {
+		if (vf.user) {
+			this.template = 'menu/authorized';
+			this.setTemplateOptions({name: vf.user.name });
+		}
 	}
 });

@@ -17,6 +17,10 @@ class Category extends Api
 
 	public function methodList()
 	{
-		return Orm::find('Category', ['user.User'], [$this->user->getId()])->getData();
+		if ($this->user) {
+			return Orm::find('Category', ['user.User'], [$this->user->getId()])->getData();
+		} else {
+			return Orm::find('Category')->getData();
+		}
 	}
 }

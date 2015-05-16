@@ -12,7 +12,7 @@
                 <input type="text" class="form-control" name="amount" value="" placeholder="Сколько ?"/>
             </div>
             <div class="form-group col-xs-2">
-
+                <div class="select-categories"></div>
             </div>
             <div class="form-group col-xs-2">
                 <button type="submit" class="btn btn-default" name="AddNew">Добавить</button>

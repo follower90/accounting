@@ -5,6 +5,8 @@
 		modules: {},
 		options: {},
 
+		user: false,
+
 		module: function (name, component) {
 			this.modules[name] = component;
 		},
@@ -65,26 +67,28 @@ vf.module('Api', {
 	get: function (url, type, callback) {
 		this._api().get(url, type, callback);
 	},
-	post:  function (url, type, params, callback) {
+	post: function (url, type, params, callback) {
 		this._api().post(url, type, params, callback);
 	},
 
-	_api: function() {
+	_api: function () {
 		var Api = function () {
-
 			return {
+				_contentType: '',
+				_callback: function () {
+				},
 
-				get: function (url, type, callback) {
+				get: function (url, contentType, callback) {
 					this._request(url, 'GET');
 					this._callback = callback;
-					this._type = type;
+					this._contentType = contentType;
 					return this;
 				},
 
-				post: function (url, type, params, callback) {
+				post: function (url, contentType, params, callback) {
 					this._request(url, 'POST', params);
 					this._callback = callback;
-					this._type = type;
+					this._contentType = contentType;
 					return this;
 				},
 
@@ -107,14 +111,17 @@ vf.module('Api', {
 					xmlHttp.onreadystatechange = function () {
 						if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 							if (api._callback) {
-								switch (api._type) {
+								switch (api._contentType) {
 									case 'text/html':
 										var parser = new DOMParser(),
 											dom = parser.parseFromString(xmlHttp.responseText, "text/html"),
 											result = dom.body.innerHTML;
 										break;
+									case 'json':
+											result = JSON.parse(xmlHttp.responseText);
+										break;
 									default:
-										result = xmlHttp;
+										result = xmlHttp.responseText;
 										break;
 								}
 
@@ -233,7 +240,8 @@ vf.module('Widget', {
 	},
 
 	load: function() {
-		this.beforeRender(this.params);
+		this.includeInlineWidgets();
+		this.beforeRender();
 		this.render();
 		this.afterRender();
 	},
@@ -242,8 +250,14 @@ vf.module('Widget', {
 
 	},
 
+	beforeActivate: function(params) {
+
+	},
+
 	activate: function(params) {
 		this.params = params;
+		this.beforeActivate(this.params);
+
 		if (this.dom) {
 			this.load();
 			this.renderInlineWidgets();
@@ -252,7 +266,7 @@ vf.module('Widget', {
 		}
 	},
 
-	loadTemplate: function (params) {
+	loadTemplate: function () {
 		vf.utils.loadTemplate(this.template, function(template) {
 			this.dom = template;
 			this.load(this.params);
@@ -260,20 +274,22 @@ vf.module('Widget', {
 		}.bind(this));
 	},
 
-	renderInlineWidgets: function() {
-
+	includeInlineWidgets: function() {
 		this.inlineWidgets = {};
 
 		for (var alias in this.widgets) {
 			var inlineWidget = this.widgets[alias];
 
 			if (inlineWidget.widget) {
-				widget = vf.widgets[inlineWidget.widget];
-				this.inlineWidgets[alias] = widget;
+				this.inlineWidgets[alias] = vf.widgets[inlineWidget.widget];
 			} else {
 				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
 			}
 		}
+
+	},
+
+	renderInlineWidgets: function() {
 
 		for (var w in this.inlineWidgets) {
 			var widget = this.inlineWidgets[w];
@@ -296,34 +312,53 @@ vf.widget('Layout', {
 
 	container: '#app',
 	template: 'layout',
-	widgets: {
-		menu: {
-			widget: 'Menu'
-		},
-		sitePage: {}
-	},
 
-	beforeRender: function (params) {
-		this.widgets.sitePage = {
-			widget: params['page']
-		};
+	beforeActivate: function (params) {
+		if (vf.user) {
+			this.widgets = {
+				menu: {
+					widget: 'Menu'
+				},
+				sitePage: {
+					widget: params['page']
+				}
+			};
+		} else {
+			vf.modules.Api.get('/api/User.auth', 'json', function (data) {
+				vf.user = data;
+				this.widgets = {
+					menu: {
+						widget: 'Menu'
+					}
+				};
+				if (vf.user) {
+					this.widgets.sitePage = {
+						widget: params['page']
+					};
+				}
+				this.activate(params);
+			}.bind(this));
+		}
 	}
 });
 
 vf.widget('Menu', {
 
 	container: '#menu',
-	template: 'menu',
+	template: 'menu/unathorized',
 
-	beforeRender: function () {
-		this.setTemplateOptions({name: 'Vitaliy Malyshev'});
+	beforeActivate: function () {
+		if (vf.user) {
+			this.template = 'menu/authorized';
+			this.setTemplateOptions({name: vf.user.name });
+		}
 	}
 });
 
 vf.widget('Main', {
 
 	container: '#container',
-	template: 'main/new',
+	template: 'main/main',
 	widgets: {
 		newEntry: {
 			widget: 'NewEntry'
@@ -338,10 +373,50 @@ vf.widget('Main', {
 vf.widget('NewEntry', {
 
 	container: '#new_entry',
-	template: 'main/new_entry',
+	template: 'main/new',
+	categories: false,
+	widgets: {
+		categories: {
+			container: '.select-categories',
+			dom: '<select class="form-control" name="types">{{options}}</select>',
+			beforeRender: function() {
+				var options = '';
+				if (!!this.templateOptions) {
+					for (var i in this.templateOptions.data) {
+						var id = this.templateOptions.data[i].id,
+							name = this.templateOptions.data[i].name;
+
+						options += '<option value="' + id + '">' + name + '</option>';
+					}
+					this.setTemplateOptions({options: options});
+				}
+			}
+		}
+	},
+
+	categoriesApiURL: '/api/Category.list',
 
 	beforeRender: function () {
 
+		if (!this.categories) {
+			this
+				.inlineWidgets
+				.categories
+				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
+
+			vf.modules.Api.get(this.categoriesApiURL, 'json', function (data) {
+				this
+					.inlineWidgets
+					.categories
+					.setTemplateOptions({data: data}).load();
+				this.categories = data;
+			}.bind(this));
+		} else {
+			this
+				.inlineWidgets
+				.categories
+				.setTemplateOptions({data: this.categories});
+		}
 	}
 });
 
@@ -351,7 +426,7 @@ vf.widget('EditProfile', {
 	template: 'profile/form',
 
 	beforeRender: function () {
-		this.setTemplateOptions({name: 'Vitaliy Malyshev', login: 'follower'});
+		this.setTemplateOptions({name: vf.user.name, login: vf.user.login });
 	}
 });
 
