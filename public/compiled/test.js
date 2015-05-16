@@ -11,13 +11,6 @@
 
 		widget: function (name, widget) {
 			this.widgets[name] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), widget);
-			this.widgets[name].inlineWidgets = {};
-
-			var current = this.widgets[name];
-
-			for (var alias in current.widgets) {
-				current.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, current), current.widgets[alias]);
-			}
 		},
 
 		error: function(text) {
@@ -42,10 +35,7 @@
 			},
 
 			loadTemplate: function(template, callback) {
-				vf.modules.Api.get(vf.options.templates + template + '.tpl', 'text/html')
-					.response(function(html) {
-						callback(html);
-					});
+				return vf.modules.Api.get(vf.options.templates + template + '.tpl', 'text/html', callback);
 			},
 
 			render: function (template, vars) {
@@ -72,56 +62,71 @@
 })();
 
 vf.module('Api', {
-
-	get: function (url, type) {
-		this._request(url, 'GET');
-		this._type = type;
-		return this;
+	get: function (url, type, callback) {
+		this._api().get(url, type, callback);
+	},
+	post:  function (url, type, params, callback) {
+		this._api().post(url, type, params, callback);
 	},
 
-	post: function (url, type, params) {
-		this._request(url, 'POST', params);
-		this._type = type;
-		return this;
-	},
+	_api: function() {
+		var Api = function () {
 
-	response: function(callback) {
-		this._callback = callback;
-	},
+			return {
 
-	_request: function(url, type, callback, params) {
-		var xmlHttp = new XMLHttpRequest(),
-			api = this;
+				get: function (url, type, callback) {
+					this._request(url, 'GET');
+					this._callback = callback;
+					this._type = type;
+					return this;
+				},
 
-		switch (type) {
-			case 'GET':
-				xmlHttp.open('GET', url, true);
-				xmlHttp.send(null);
-				break;
+				post: function (url, type, params, callback) {
+					this._request(url, 'POST', params);
+					this._callback = callback;
+					this._type = type;
+					return this;
+				},
 
-			case 'POST':
-				xmlHttp.open('POST', url, true);
-				xmlHttp.send(new FormData(params));
-				break;
-		}
+				_request: function (url, type, callback, params) {
+					var xmlHttp = new XMLHttpRequest(),
+						api = this;
 
-		xmlHttp.onreadystatechange = function() {
-			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-				if (api._callback) {
-						switch(api._type) {
-							case 'text/html':
-								var parser = new DOMParser();
-								var result  = parser.parseFromString(xmlHttp.responseText, "text/html");
-								break;
-							default:
-								result = xmlHttp;
-								break;
+					switch (type) {
+						case 'GET':
+							xmlHttp.open('GET', url, true);
+							xmlHttp.send(null);
+							break;
+
+						case 'POST':
+							xmlHttp.open('POST', url, true);
+							xmlHttp.send(new FormData(params));
+							break;
+					}
+
+					xmlHttp.onreadystatechange = function () {
+						if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+							if (api._callback) {
+								switch (api._type) {
+									case 'text/html':
+										var parser = new DOMParser(),
+											dom = parser.parseFromString(xmlHttp.responseText, "text/html"),
+											result = dom.body.innerHTML;
+										break;
+									default:
+										result = xmlHttp;
+										break;
+								}
+
+								api._result = api._callback(result);
+							}
 						}
-
-						api._result = api._callback(result);
+					};
 				}
 			}
 		};
+
+		return new Api();
 	}
 });
 
@@ -165,8 +170,7 @@ vf.module('Router', {
 				params = vf.utils.extend(args, params);
 
 				if (widget) {
-					widget.load(params);
-					widget.render();
+					widget.activate(params);
 				} else {
 					vf.error('Widget: ' + route.page + ' not found');
 				}
@@ -205,65 +209,159 @@ window.onload = function () {
 	vf.modules.Router.run();
 };
 
+window.onhashchange = function() {
+	vf.modules.Router.run();
+};
 vf.module('Widget', {
 
 	container: '',
 	template: '',
+	dom: false,
 	templateOptions: {},
 
 	setTemplateOptions: function(obj) {
 		this.templateOptions = obj;
+		return this;
+	},
+
+	beforeRender: function(params) {
+	},
+
+	render: function() {
+		var container = vf.dom.find1(this.container);
+		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
 	},
 
 	load: function() {
+		this.beforeRender(this.params);
+		this.render();
+		this.afterRender();
 	},
 
-	render: function () {
-		var container = vf.dom.find1(this.container),
-			_w = this;
+	afterRender: function() {
 
-		if (container) {
-			vf.utils.loadTemplate(this.template, function(template) {
-				var rendered = vf.utils.render(template.firstChild.innerHTML, _w.templateOptions);
-				container.innerHTML = rendered;
-				_w.renderInlineWidgets();
-			});
+	},
+
+	activate: function(params) {
+		this.params = params;
+		if (this.dom) {
+			this.load();
+			this.renderInlineWidgets();
+		} else {
+			this.loadTemplate();
 		}
 	},
 
+	loadTemplate: function (params) {
+		vf.utils.loadTemplate(this.template, function(template) {
+			this.dom = template;
+			this.load(this.params);
+			this.renderInlineWidgets();
+		}.bind(this));
+	},
+
 	renderInlineWidgets: function() {
-		for (var alias in this.inlineWidgets) {
-			var widget = this.inlineWidgets[alias];
+
+		this.inlineWidgets = {};
+
+		for (var alias in this.widgets) {
+			var inlineWidget = this.widgets[alias];
+
+			if (inlineWidget.widget) {
+				widget = vf.widgets[inlineWidget.widget];
+				this.inlineWidgets[alias] = widget;
+			} else {
+				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
+			}
+		}
+
+		for (var w in this.inlineWidgets) {
+			var widget = this.inlineWidgets[w];
 
 			if (widget) {
-				widget.load();
-				widget.render();
+				widget.activate();
 			}
 		}
 	}
 });
 
 vf.modules.Router.routes({
-	'#/': {page: 'Page'}
+	'#/': {page: 'Layout', params: {page: 'Main'}},
+	'#/profile': {page: 'Layout',  params: {page: 'Profile'}}
 });
 
 vf.options.templates = 'public/test/js/templates/';
 
-vf.widget('Page', {
+vf.widget('Layout', {
 
-	container: '.container',
-	template: 'page',
+	container: '#app',
+	template: 'layout',
 	widgets: {
 		menu: {
-			container: '#menu',
-			template: 'menu',
-			load: function () {
-				this.setTemplateOptions({text: 'some text'});
-			}
+			widget: 'Menu'
+		},
+		sitePage: {}
+	},
+
+	beforeRender: function (params) {
+		this.widgets.sitePage = {
+			widget: params['page']
+		};
+	}
+});
+
+vf.widget('Menu', {
+
+	container: '#menu',
+	template: 'menu',
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: 'Vitaliy Malyshev'});
+	}
+});
+
+vf.widget('Main', {
+
+	container: '#container',
+	template: 'main/new',
+	widgets: {
+		newEntry: {
+			widget: 'NewEntry'
 		}
 	},
 
-	load: function () {
-		this.setTemplateOptions({name: 'Vasya'});
+	beforeRender: function () {
+		this.setTemplateOptions({name: 'test'});
+	}
+});
+
+vf.widget('NewEntry', {
+
+	container: '#new_entry',
+	template: 'main/new_entry',
+
+	beforeRender: function () {
+
+	}
+});
+
+vf.widget('EditProfile', {
+
+	container: '#edit-profile',
+	template: 'profile/form',
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: 'Vitaliy Malyshev', login: 'follower'});
+	}
+});
+
+vf.widget('Profile', {
+
+	container: '#container',
+	template: 'profile/profile',
+	widgets: {
+		editProfile: {
+			widget: 'EditProfile'
+		}
 	}
 });
