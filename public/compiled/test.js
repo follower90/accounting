@@ -226,32 +226,7 @@ vf.module('Widget', {
 	dom: false,
 	templateOptions: {},
 
-	setTemplateOptions: function(obj) {
-		this.templateOptions = obj;
-		return this;
-	},
-
-	beforeRender: function(params) {
-	},
-
-	render: function() {
-		var container = vf.dom.find1(this.container);
-		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
-	},
-
-	load: function() {
-		this.includeInlineWidgets();
-		this.beforeRender();
-		this.render();
-		this.afterRender();
-	},
-
-	afterRender: function() {
-
-	},
-
 	beforeActivate: function(params) {
-
 	},
 
 	activate: function(params) {
@@ -274,6 +249,29 @@ vf.module('Widget', {
 		}.bind(this));
 	},
 
+	load: function() {
+		this.includeInlineWidgets();
+		this.beforeRender();
+		this.render();
+		this.afterRender();
+	},
+
+	setTemplateOptions: function(obj) {
+		this.templateOptions = obj;
+		return this;
+	},
+
+	beforeRender: function(params) {
+	},
+
+	render: function() {
+		var container = vf.dom.find1(this.container);
+		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
+	},
+
+	afterRender: function() {
+	},
+
 	includeInlineWidgets: function() {
 		this.inlineWidgets = {};
 
@@ -290,7 +288,6 @@ vf.module('Widget', {
 	},
 
 	renderInlineWidgets: function() {
-
 		for (var w in this.inlineWidgets) {
 			var widget = this.inlineWidgets[w];
 
@@ -324,7 +321,7 @@ vf.widget('Layout', {
 				}
 			};
 		} else {
-			vf.modules.Api.get('/api/User.auth', 'json', function (data) {
+			vf.modules.Api.get('/api.php?method=User.auth', 'json', function (data) {
 				vf.user = data;
 				this.widgets = {
 					menu: {
@@ -335,8 +332,9 @@ vf.widget('Layout', {
 					this.widgets.sitePage = {
 						widget: params['page']
 					};
+					this.activate(params);
 				}
-				this.activate(params);
+
 			}.bind(this));
 		}
 	}
@@ -394,8 +392,6 @@ vf.widget('NewEntry', {
 		}
 	},
 
-	categoriesApiURL: '/api/Category.list',
-
 	beforeRender: function () {
 
 		if (!this.categories) {
@@ -404,7 +400,7 @@ vf.widget('NewEntry', {
 				.categories
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.modules.Api.get(this.categoriesApiURL, 'json', function (data) {
+			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
 				this
 					.inlineWidgets
 					.categories
