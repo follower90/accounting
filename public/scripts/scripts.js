@@ -56,20 +56,21 @@ $.fn.refreshEntry = function (id) {
 		cache: false,
 		success: function (data) {
 			var elem = $('#tr-' + id);
-			var cl = 'tr-even';
+			var cl = 'tr-odd';
 			if (elem.hasClass(cl)) {
 				cl = 'tr-even';
-			} else cl = 'tr-odd';
+			}
+			console.log(data);
 
 			var image = '<img src="/public/images/plus.png" alt="">';
-			if (data.type == '-') {
+			if (data.category.type == '-') {
 				image = '<img src="/public/images/minus.png" alt="">';
 			}
 
 			$('#tr-' + id + ' .icon-edit').html(image);
 			$('#tr-' + id + ' .date-edit').html(data.date);
 			$('#tr-' + id + ' .name-edit').html(data.name);
-			$('#tr-' + id + ' .type-edit').html(data.cat);
+			$('#tr-' + id + ' .type-edit').html(data.category.name);
 			$('#tr-' + id + ' .sum-edit').html(data.sum + ' ₴');
 		}
 	});

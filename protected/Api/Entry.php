@@ -5,6 +5,7 @@ namespace Accounting\Api;
 use Core\Orm;
 use Core\Authorize;
 use Core\Api as Api;
+use Core\OrmMapper;
 
 class Entry extends Api
 {
@@ -17,11 +18,16 @@ class Entry extends Api
 
 	public function methodGet($args)
 	{
-		if ($entry = Orm::load('Entry', $args['id'])) {
-			$result = $entry->getValues();
-			$result['cat'] = Orm::load('Category', $entry->getValue('category_id'))->getValue('name');
+		if (isset($args['id'])) {
 
-			return $result;
+			$mapper = OrmMapper::create('Entry');
+			$mapper
+				->setFilter(['id'], [$args['id']])
+				->setFields(['id', 'name', 'date', 'sum'])
+				->setFields(['category.type', 'category.name'])
+				->setLimit(1);
+
+			return $mapper->getDataMap();
 		}
 
 		return false;
@@ -29,33 +35,25 @@ class Entry extends Api
 
 	public function methodSave($args)
 	{
-		$this->db = \Core\Database\PDO::getInstance();
-
-		if ($id = $this->user->getId()) {
+		if ($userId = $this->user->getId()) {
 
 			if ($args['id']) {
-				$this->db->query("
-						UPDATE `Entry` set date=?, name=?, category_id=?, sum=?
-						WHERE id=? and user_id=?",
-					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $args['id'], $id]
-				);
+				$entry = Orm::load('Entry', $args['id']);
 			} else {
-				$args['id'] = $this->db->insert_id("
-					INSERT INTO `Entry` set date=?, name=?, category_id=?, sum=?, user_id=?",
-					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $id]
-				);
+				$entry = Orm::create('Entry');
 			}
 
-			$data = $this->db->row("
-					SELECT e.*, cat.name as type, cat.type as d
-					FROM `Entry` e
-					LEFT JOIN `Category` cat ON e.category_id = cat.id
+			$entry->setValues([
+				'date' => date('Y-m-d', strtotime($args['date'])),
+				'name' => $args['name'],
+				'category_id' => $args['cat'],
+				'sum' => $args['sum'],
+				'user_id' => $userId
+			]);
 
-					WHERE e.id = ?
-					AND e.user_id = ?",
-				[$args['id'], $id]);
+			Orm::save($entry);
 
-			return $data;
+			return ['success' => true];
 		}
 
 		return false;
