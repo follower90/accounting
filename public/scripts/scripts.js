@@ -22,7 +22,7 @@ var saveEntry = function (id) {
 	var cat = $('#types-edit-' + id + ' :selected').val();
 
 	$.ajax({
-		type: "POST", url: "/api/Entry.save", dataType: "json", data: {name: name, date: date, sum: sum, cat: cat, id: id}, cache: false, success: function (data) {
+		type: "POST", url: "/api.php?method=Entry.save", dataType: "json", data: {name: name, date: date, sum: sum, cat: cat, id: id}, cache: false, success: function (data) {
 			$('#tr-' + id).refreshEntry(id);
 			editEntry(id);
 		}
@@ -38,7 +38,7 @@ var deleteEntry = function (id) {
 	if (confirm('Вы уверены что хотите удалить?')) {
 		var dataString = 'id=' + id;
 		$.ajax({
-			type: "POST", url: "/api/Entry.delete", data: dataString, cache: false, success: function (data) {
+			type: "POST", url: "/api.php?method=Entry.delete", data: dataString, cache: false, success: function (data) {
 				$('#tr-' + id).fadeOut('slow');
 			}
 		});
@@ -50,7 +50,7 @@ var deleteEntry = function (id) {
 $.fn.refreshEntry = function (id) {
 	$.ajax({
 		type: "POST",
-		url: "/api/Entry.get",
+		url: "/api.php?method=Entry.get",
 		data: {id: id},
 		dataType: "json",
 		cache: false,
