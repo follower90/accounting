@@ -33,14 +33,14 @@ class Entry extends Api
 
 		if ($id = $this->user->getId()) {
 
-			if ($request['id']) {
+			if ($args['id']) {
 				$this->db->query("
 						UPDATE `Entry` set date=?, name=?, category_id=?, sum=?
 						WHERE id=? and user_id=?",
 					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $args['id'], $id]
 				);
 			} else {
-				$request['id'] = $this->db->insert_id("
+				$args['id'] = $this->db->insert_id("
 					INSERT INTO `Entry` set date=?, name=?, category_id=?, sum=?, user_id=?",
 					[date("Y-m-d", strtotime($args['date'])), $args['name'], $args['cat'], $args['sum'], $id]
 				);
