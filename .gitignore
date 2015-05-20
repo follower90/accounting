@@ -2,5 +2,5 @@
 node_modules
 vendor
 config.php
-setup.php
 composer.lock
+public/compiled
