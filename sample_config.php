@@ -1,6 +1,12 @@
 <?php
 
-\Core\Config::setDb('default', [
+/*
+ * Set database connection and rename this file to 'config.php'
+ */
+
+use \Core\Config;
+
+Config::setDb('default', [
 	'host' => 'host',
 	'name' => 'db',
 	'user' => 'user',
@@ -8,4 +14,5 @@
 	'charset' => 'utf8'
 ]);
 
-\Core\Config::registerProject('Accounting', 'default');
+Config::registerProject('Accounting', 'default');
+Config::registerProject('Admin', 'default');

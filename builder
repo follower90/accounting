@@ -23,7 +23,7 @@ class ProjectBuilder
 		foreach ($projects as $project) {
 			if ($cmd != 'add') { //silent add
 				echo '-------------------------------' . PHP_EOL;
-				echo ($project ? $project : 'main'). PHP_EOL;
+				echo ($project ? 'follower/' . $project : 'main'). PHP_EOL;
 				echo '-------------------------------' . PHP_EOL;
 				echo $this->runCmd($path . $project, $cmd, $params);
 			}
