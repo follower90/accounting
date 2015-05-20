@@ -62,17 +62,14 @@ class Entry extends Api
 
 	public function methodList($args)
 	{
-		$entries = Orm::find('Entry', ['user_id', '>date<'], [$this->user->getId(), [$args['from'], $args['to']]], ['sort' => ['id', 'desc']])->getData();
-		$categories = Orm::find('Category')->getData();
+		$mapper = OrmMapper::create('Entry');
+		$mapper
+			->setFilter(['user_id', '>date<'], [$this->user->getId(), [$args['from'], $args['to']]])
+			->setFields(['id', 'name', 'date', 'sum'])
+			->setFields(['category.type', 'category.name'])
+			->setSorting('id', 'desc');
 
-		array_walk($entries, function(&$entry) use (&$categories) {
-			$category = $categories[$entry['category_id']];
-			$entry['type'] = $category['type'];
-			$entry['category'] = $category['name'];
-			return $entry;
-		});
-
-		return $entries;
+		return $mapper->getDataMap();
 	}
 
 	public function methodDelete($args)

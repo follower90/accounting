@@ -12,14 +12,13 @@
 		<tbody>
 			<?php
 				foreach ($vars['entries'] as $row) {
-
-					if($row['type']=='-') $icon = '<img src="/public/images/minus.png" alt="" />';
-					elseif($row['type']=='+') $icon = '<img src="/public/images/plus.png" alt="" />';
+					if($row['category']['type']=='-') $icon = '<img src="/public/images/minus.png" alt="" />';
+					elseif($row['category']['type']=='+') $icon = '<img src="/public/images/plus.png" alt="" />';
 					echo '<tr id="tr-'.$row['id'].'" num="'.$row['id'].'">
 							<td class="icon-edit">'.$icon.'</td>
 							<td class="date-edit">'.date("d.m.Y", strtotime($row['date'])).'</td>
 							<td class="name-edit">'.$row['name'].'</td>
-							<td class="cat-row type-edit">'.$row['category'].'</td>
+							<td class="cat-row type-edit">'.$row['category']['name'].'</td>
 							<td class="sum-edit">'.$row['sum'].' ₴</td>
 							<td>
 								<a class="label label-primary" href="javascript:void(0);" onclick="editEntry('.$row['id'].');">редактировать</a>
