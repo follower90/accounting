@@ -34,7 +34,7 @@
 							<td><select name="types" class="form-control input-sm" id="types-edit-'.$row['id'].'">';
 					foreach($vars['categories'] as $id => $type) {
 						$sel = '';
-						if($id==$row['category_id']) $sel='selected="selected"';
+						if($id==$row['category']['id']) $sel='selected="selected"';
 						echo '<option value='.$id.' '.$sel.'>'.$type.'</option>';
 					}
 					echo '</select>';

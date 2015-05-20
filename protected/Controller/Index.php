@@ -79,7 +79,7 @@ class Index extends Base
 		$sum = 0;
 
 		array_walk($entries, function (&$entry) use (&$sum, $type) {
-			if ($entry['type'] == $type) {
+			if ($entry['category']['type'] == $type) {
 				$sum += $entry['sum'];
 			}
 		});

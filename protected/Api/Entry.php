@@ -66,7 +66,7 @@ class Entry extends Api
 		$mapper
 			->setFilter(['user_id', '>date<'], [$this->user->getId(), [$args['from'], $args['to']]])
 			->setFields(['id', 'name', 'date', 'sum'])
-			->setFields(['category.type', 'category.name'])
+			->setFields(['category.id', 'category.type', 'category.name'])
 			->setSorting('id', 'desc');
 
 		return $mapper->getDataMap();

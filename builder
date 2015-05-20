@@ -46,11 +46,6 @@ class ProjectBuilder
 				if (isset ($this->args[2])) {
 					$this->applyToAllRepo('add', '.');
 					$this->applyToAllRepo('commit -am \'' . $this->args[2] . '\'');
-
-					$this->result = array(
-						'Untracked files were updated',
-						'Commit SUCCESS: \'' . $this->args[2] . '\''
-					);
 				} else {
 					$this->result[] = 'Enter commit reason';
 				}
