@@ -22,9 +22,11 @@ class ProjectBuilder
 	    array_unshift($projects, '');
 
 		foreach ($projects as $project) {
-		    echo '-------------------------------' . PHP_EOL;
-		    echo ($project ? $project : 'main'). PHP_EOL;
-		    echo '-------------------------------' . PHP_EOL;
+		    if ($cmd != 'add') {
+		        echo '-------------------------------' . PHP_EOL;
+		        echo ($project ? $project : 'main'). PHP_EOL;
+		        echo '-------------------------------' . PHP_EOL;
+		    }
 			echo $this->runCmd($path . $project, $cmd, $params);
 		}
 	}
