@@ -86,7 +86,7 @@ vf.module('Api', {
 				},
 
 				post: function (url, contentType, params, callback) {
-					this._request(url, 'POST', params);
+					this._request(url, 'POST', callback, params);
 					this._callback = callback;
 					this._contentType = contentType;
 					return this;
@@ -103,7 +103,13 @@ vf.module('Api', {
 							break;
 
 						case 'POST':
+							var dataString = '';
+							for (var key in params) {
+								dataString += key + '=' + params[key] + '&';
+							}
+
 							xmlHttp.open('POST', url, true);
+							//xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 							xmlHttp.send(new FormData(params));
 							break;
 					}
@@ -151,6 +157,89 @@ vf.module('Event', {
 			if (event == events[i].alias) {
 				events[i].callback();
 				return;
+			}
+		}
+	}
+});
+
+vf.module('Page', {
+
+	container: '',
+	template: '',
+	dom: false,
+	templateOptions: {},
+
+	beforeActivate: function(params) {
+	},
+
+	activate: function(params) {
+		this.params = params;
+		this.beforeActivate(this.params);
+
+		if (this.dom) {
+			this.load();
+			this.renderInlineWidgets();
+		} else {
+			this.loadTemplate();
+		}
+	},
+
+	loadTemplate: function () {
+		vf.utils.loadTemplate(this.template, function(template) {
+			this.dom = template;
+			this.load(this.params);
+			this.renderInlineWidgets();
+		}.bind(this));
+	},
+
+	load: function() {
+		this.includeInlineWidgets();
+		this.beforeRender();
+		this.render();
+		this.afterRender();
+	},
+
+	setTemplateOptions: function(obj) {
+		this.templateOptions = obj;
+		return this;
+	},
+
+	beforeRender: function(params) {
+	},
+
+	render: function() {
+		var container = vf.dom.find1(this.container);
+		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
+	},
+
+	afterRender: function() {
+	},
+
+	includeInlineWidgets: function() {
+		this.inlineWidgets = {};
+
+		for (var alias in this.widgets) {
+			var inlineWidget = this.widgets[alias];
+
+			if (inlineWidget.widget) {
+				this.inlineWidgets[alias] = vf.widgets[inlineWidget.widget];
+
+				for (var opt in inlineWidget) {
+					this.inlineWidgets[alias][opt] = inlineWidget[opt];
+				}
+			} else {
+				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
+			}
+		}
+
+	},
+
+	renderInlineWidgets: function() {
+		for (var w in this.inlineWidgets) {
+			var widget = this.inlineWidgets[w];
+
+			if (widget) {
+				widget.activate();
 			}
 		}
 	}
@@ -235,7 +324,7 @@ vf.module('Widget', {
 
 		if (this.dom) {
 			this.load();
-			this.renderInlineWidgets();
+			this.renderWidgets();
 		} else {
 			this.loadTemplate();
 		}
@@ -245,15 +334,16 @@ vf.module('Widget', {
 		vf.utils.loadTemplate(this.template, function(template) {
 			this.dom = template;
 			this.load(this.params);
-			this.renderInlineWidgets();
+			this.renderWidgets();
 		}.bind(this));
 	},
 
 	load: function() {
-		this.includeInlineWidgets();
+		this.includeWidgets();
 		this.beforeRender();
 		this.render();
 		this.afterRender();
+		this.registerDOMHandlers();
 	},
 
 	setTemplateOptions: function(obj) {
@@ -272,7 +362,7 @@ vf.module('Widget', {
 	afterRender: function() {
 	},
 
-	includeInlineWidgets: function() {
+	includeWidgets: function() {
 		this.inlineWidgets = {};
 
 		for (var alias in this.widgets) {
@@ -280,6 +370,10 @@ vf.module('Widget', {
 
 			if (inlineWidget.widget) {
 				this.inlineWidgets[alias] = vf.widgets[inlineWidget.widget];
+
+				for (var opt in inlineWidget) {
+					this.inlineWidgets[alias][opt] = inlineWidget[opt];
+				}
 			} else {
 				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
 			}
@@ -287,13 +381,152 @@ vf.module('Widget', {
 
 	},
 
-	renderInlineWidgets: function() {
+	renderWidgets: function() {
 		for (var w in this.inlineWidgets) {
 			var widget = this.inlineWidgets[w];
 
 			if (widget) {
 				widget.activate();
 			}
+		}
+	},
+
+	registerDOMHandlers: function() {
+		if (!!this.domHandlers) {
+			for (var i in this.domHandlers) {
+				var handler = this.domHandlers[i],
+					callback = handler.callback,
+					target = vf.dom.find1(this.container + ' ' + handler.element),
+					_ = this;
+
+				if (!!target) {
+					target.addEventListener(handler.event, function () {
+						_[callback].call(_, target, handler);
+					});
+				}
+			}
+		}
+	},
+
+	find1: function(query) {
+		return vf.dom.find1(this.container + ' ' + query);
+	},
+
+	find: function(query) {
+		return vf.dom.find(this.container + ' ' + query);
+	}
+
+});
+
+vf.widget('Select_Box', {
+
+	dom: '<select></select>',
+
+	beforeRender: function() {
+		var options = '';
+		if (!!this.templateOptions) {
+			for (var i in this.templateOptions.data) {
+				var id = this.templateOptions.data[i].id,
+					name = this.templateOptions.data[i].name;
+
+				options += '<option value="' + id + '">' + name + '</option>';
+			}
+			this.setTemplateOptions({options: options});
+		}
+	}
+
+});
+
+vf.widget('Main', {
+
+	container: '#container',
+	template: 'main/main',
+	widgets: {
+		newEntry: {
+			widget: 'NewEntry'
+		}
+	},
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: 'test'});
+	}
+});
+
+vf.widget('NewEntry', {
+
+	container: '#new_entry',
+	template: 'main/new',
+	categories: false,
+	widgets: {
+		categories: {
+			container: '.select-categories',
+			dom: '<select class="form-control" id="type" name="types">{{options}}</select>',
+			widget: 'Select_Box'
+		}
+	},
+
+	domHandlers: {
+		new: {
+			element: '.new-entry',
+			event: 'click',
+			callback: 'newEntry'
+		}
+	},
+
+	beforeRender: function () {
+		if (!this.categories) {
+			this
+				.inlineWidgets
+				.categories
+				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
+
+			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
+				this
+					.inlineWidgets
+					.categories
+					.setTemplateOptions({data: data}).load();
+				this.categories = data;
+			}.bind(this));
+		} else {
+			this
+				.inlineWidgets
+				.categories
+				.setTemplateOptions({data: this.categories});
+		}
+	},
+
+	newEntry: function() {
+		var _  = this;
+		var entry = {
+			date: _.find1('#date-add').value,
+			name: _.find1('#name').value,
+			cat: _.find1('#type').value,
+			sum: _.find1('#sum').value
+		};
+
+		vf.modules.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
+			console.log(arguments);
+		})
+	}
+});
+
+vf.widget('EditProfile', {
+
+	container: '#edit-profile',
+	template: 'profile/form',
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: vf.user.name, login: vf.user.login });
+	}
+});
+
+vf.widget('Profile', {
+
+	container: '#container',
+	template: 'profile/profile',
+	widgets: {
+		editProfile: {
+			widget: 'EditProfile'
 		}
 	}
 });
@@ -349,90 +582,6 @@ vf.widget('Menu', {
 		if (vf.user) {
 			this.template = 'menu/authorized';
 			this.setTemplateOptions({name: vf.user.name });
-		}
-	}
-});
-
-vf.widget('Main', {
-
-	container: '#container',
-	template: 'main/main',
-	widgets: {
-		newEntry: {
-			widget: 'NewEntry'
-		}
-	},
-
-	beforeRender: function () {
-		this.setTemplateOptions({name: 'test'});
-	}
-});
-
-vf.widget('NewEntry', {
-
-	container: '#new_entry',
-	template: 'main/new',
-	categories: false,
-	widgets: {
-		categories: {
-			container: '.select-categories',
-			dom: '<select class="form-control" name="types">{{options}}</select>',
-			beforeRender: function() {
-				var options = '';
-				if (!!this.templateOptions) {
-					for (var i in this.templateOptions.data) {
-						var id = this.templateOptions.data[i].id,
-							name = this.templateOptions.data[i].name;
-
-						options += '<option value="' + id + '">' + name + '</option>';
-					}
-					this.setTemplateOptions({options: options});
-				}
-			}
-		}
-	},
-
-	beforeRender: function () {
-
-		if (!this.categories) {
-			this
-				.inlineWidgets
-				.categories
-				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
-
-			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
-				this
-					.inlineWidgets
-					.categories
-					.setTemplateOptions({data: data}).load();
-				this.categories = data;
-			}.bind(this));
-		} else {
-			this
-				.inlineWidgets
-				.categories
-				.setTemplateOptions({data: this.categories});
-		}
-	}
-});
-
-vf.widget('EditProfile', {
-
-	container: '#edit-profile',
-	template: 'profile/form',
-
-	beforeRender: function () {
-		this.setTemplateOptions({name: vf.user.name, login: vf.user.login });
-	}
-});
-
-vf.widget('Profile', {
-
-	container: '#container',
-	template: 'profile/profile',
-	widgets: {
-		editProfile: {
-			widget: 'EditProfile'
 		}
 	}
 });

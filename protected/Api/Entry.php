@@ -53,7 +53,7 @@ class Entry extends Api
 
 			Orm::save($entry);
 
-			return ['success' => true];
+			return ['success' => true, 'data' => $entry->getValues()];
 		}
 
 		return false;
