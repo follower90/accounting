@@ -1,4 +1,4 @@
-vf.widget('EditProfile', {
+App.EditProfile = vf.Widget.extend({
 
 	container: '#edit-profile',
 	template: 'profile/form',

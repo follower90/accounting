@@ -1,4 +1,4 @@
-vf.widget('Layout', {
+App.Layout = vf.Widget.extend({
 
 	container: '#app',
 	template: 'layout',
@@ -6,25 +6,17 @@ vf.widget('Layout', {
 	beforeActivate: function (params) {
 		if (vf.user) {
 			this.widgets = {
-				menu: {
-					widget: 'Menu'
-				},
-				sitePage: {
-					widget: params['page']
-				}
+				menu: App.Menu,
+				sitePage: params['page']
 			};
 		} else {
-			vf.modules.Api.get('/api.php?method=User.auth', 'json', function (data) {
+			vf.Api.get('/api.php?method=User.auth', 'json', function (data) {
 				vf.user = data;
 				this.widgets = {
-					menu: {
-						widget: 'Menu'
-					}
+					menu: App.Menu
 				};
 				if (vf.user) {
-					this.widgets.sitePage = {
-						widget: params['page']
-					};
+					this.widgets.sitePage = params['page'];
 					this.activate(params);
 				}
 

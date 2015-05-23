@@ -1,10 +1,7 @@
-vf.widget('Profile', {
-
+App.Profile = vf.Widget.extend({
 	container: '#container',
 	template: 'profile/profile',
 	widgets: {
-		editProfile: {
-			widget: 'EditProfile'
-		}
+		editProfile: App.EditProfile
 	}
 });

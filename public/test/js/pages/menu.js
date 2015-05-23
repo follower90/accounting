@@ -1,4 +1,4 @@
-vf.widget('Menu', {
+App.Menu = vf.Widget.extend({
 
 	container: '#menu',
 	template: 'menu/unathorized',

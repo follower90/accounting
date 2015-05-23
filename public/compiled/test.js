@@ -2,17 +2,24 @@
 	var vf = {
 
 		widgets: {},
-		modules: {},
-		options: {},
+		_options: {},
 
 		user: false,
 
 		module: function (name, component) {
-			this.modules[name] = component;
+			this[name] = component;
+
+			component.extend = function (userComponent) {
+				return vf.utils.extend(vf.utils.extend({}, component), userComponent);
+			};
+		},
+
+		registerOption: function(alias, value) {
+			this._options[alias] = value;
 		},
 
 		widget: function (name, widget) {
-			this.widgets[name] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), widget);
+			this.widgets[name] = vf.Widget.extend(widget);
 		},
 
 		error: function(text) {
@@ -37,7 +44,7 @@
 			},
 
 			loadTemplate: function(template, callback) {
-				return vf.modules.Api.get(vf.options.templates + template + '.tpl', 'text/html', callback);
+				return vf.Api.get(vf._options.templates + template + '.tpl', 'text/html', callback);
 			},
 
 			render: function (template, vars) {
@@ -164,104 +171,31 @@ vf.module('Event', {
 
 vf.module('Page', {
 
-	container: '',
-	template: '',
-	dom: false,
-	templateOptions: {},
 
-	beforeActivate: function(params) {
-	},
-
-	activate: function(params) {
-		this.params = params;
-		this.beforeActivate(this.params);
-
-		if (this.dom) {
-			this.load();
-			this.renderInlineWidgets();
-		} else {
-			this.loadTemplate();
-		}
-	},
-
-	loadTemplate: function () {
-		vf.utils.loadTemplate(this.template, function(template) {
-			this.dom = template;
-			this.load(this.params);
-			this.renderInlineWidgets();
-		}.bind(this));
-	},
-
-	load: function() {
-		this.includeInlineWidgets();
-		this.beforeRender();
-		this.render();
-		this.afterRender();
-	},
-
-	setTemplateOptions: function(obj) {
-		this.templateOptions = obj;
-		return this;
-	},
-
-	beforeRender: function(params) {
-	},
-
-	render: function() {
-		var container = vf.dom.find1(this.container);
-		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
-	},
-
-	afterRender: function() {
-	},
-
-	includeInlineWidgets: function() {
-		this.inlineWidgets = {};
-
-		for (var alias in this.widgets) {
-			var inlineWidget = this.widgets[alias];
-
-			if (inlineWidget.widget) {
-				this.inlineWidgets[alias] = vf.widgets[inlineWidget.widget];
-
-				for (var opt in inlineWidget) {
-					this.inlineWidgets[alias][opt] = inlineWidget[opt];
-				}
-			} else {
-				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
-			}
-		}
-
-	},
-
-	renderInlineWidgets: function() {
-		for (var w in this.inlineWidgets) {
-			var widget = this.inlineWidgets[w];
-
-			if (widget) {
-				widget.activate();
-			}
-		}
-	}
 });
 
 vf.module('Router', {
-	routesMap: {},
+	routes: {},
 
-	routes: function (map) {
-		this.routesMap = vf.utils.extend(this.routesMap, map);
+	run: function() {
+		var _ = this;
+
+		this.update();
+		window.onhashchange = function() {
+			_.update();
+		};
 	},
 
-	run: function () {
-		for (var url in this.routesMap) {
+	update: function () {
+		for (var url in this.routes) {
 
 			var args = this._matches(url, window.location.hash);
 
 			if (args) {
-				var route = this.routesMap[url];
+				var route = this.routes[url];
 
 				var params = route.params || {},
-					widget = vf.widgets[route.page];
+					widget = route.page;
 
 				params = vf.utils.extend(args, params);
 
@@ -301,13 +235,6 @@ vf.module('Router', {
 });
 
 
-window.onload = function () {
-	vf.modules.Router.run();
-};
-
-window.onhashchange = function() {
-	vf.modules.Router.run();
-};
 vf.module('Widget', {
 
 	container: '',
@@ -355,8 +282,10 @@ vf.module('Widget', {
 	},
 
 	render: function() {
+		$(this.container).fadeOut(0);
 		var container = vf.dom.find1(this.container);
 		container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
+		$(this.container).fadeIn(500);
 	},
 
 	afterRender: function() {
@@ -375,7 +304,7 @@ vf.module('Widget', {
 					this.inlineWidgets[alias][opt] = inlineWidget[opt];
 				}
 			} else {
-				this.inlineWidgets[alias] = vf.utils.extend(vf.utils.extend({}, vf.modules.Widget), inlineWidget);
+				this.inlineWidgets[alias] = inlineWidget;
 			}
 		}
 
@@ -442,13 +371,36 @@ vf.widget('Select_Box', {
 
 });
 
-vf.widget('Main', {
+var App = {};
 
-	container: '#container',
-	template: 'main/main',
+App.Router = vf.Router.extend({
+	routes: {
+		'#/': {page: App.Layout, params: {page: App.Main}},
+		'#/profile': {page: App.Layout, params: {page: App.Profile}}
+	}
+});
+
+vf.registerOption('templates', 'public/test/js/templates/');
+
+window.onload = function () {
+	App.Router.run();
+};
+App.List = vf.Widget.extend({
+
+	container: '#main_list',
+	template: 'main/list',
+
+	beforeRender: function () {
+	}
+});
+
+App.ListItem = vf.Widget.extend({
+
+	container: '#list_items',
+	template: 'main/list_item',
 	widgets: {
-		newEntry: {
-			widget: 'NewEntry'
+		listItemEdit: {
+			template: 'main/list_item_edit'
 		}
 	},
 
@@ -457,7 +409,20 @@ vf.widget('Main', {
 	}
 });
 
-vf.widget('NewEntry', {
+App.Main = vf.Widget.extend({
+
+	container: '#container',
+	template: 'main/main',
+	widgets: {
+		new: App.NewEntry,
+		entries: App.List
+	},
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: 'test'});
+	}
+});
+App.NewEntry = vf.Widget.extend({
 
 	container: '#new_entry',
 	template: 'main/new',
@@ -485,7 +450,7 @@ vf.widget('NewEntry', {
 				.categories
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
+			vf.Api.get('/api.php?method=Category.list', 'json', function (data) {
 				this
 					.inlineWidgets
 					.categories
@@ -509,13 +474,13 @@ vf.widget('NewEntry', {
 			sum: _.find1('#sum').value
 		};
 
-		vf.modules.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
+		vf.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
 			console.log(arguments);
 		})
 	}
 });
 
-vf.widget('EditProfile', {
+App.EditProfile = vf.Widget.extend({
 
 	container: '#edit-profile',
 	template: 'profile/form',
@@ -525,25 +490,15 @@ vf.widget('EditProfile', {
 	}
 });
 
-vf.widget('Profile', {
-
+App.Profile = vf.Widget.extend({
 	container: '#container',
 	template: 'profile/profile',
 	widgets: {
-		editProfile: {
-			widget: 'EditProfile'
-		}
+		editProfile: App.EditProfile
 	}
 });
 
-vf.modules.Router.routes({
-	'#/': {page: 'Layout', params: {page: 'Main'}},
-	'#/profile': {page: 'Layout',  params: {page: 'Profile'}}
-});
-
-vf.options.templates = 'public/test/js/templates/';
-
-vf.widget('Layout', {
+App.Layout = vf.Widget.extend({
 
 	container: '#app',
 	template: 'layout',
@@ -551,25 +506,17 @@ vf.widget('Layout', {
 	beforeActivate: function (params) {
 		if (vf.user) {
 			this.widgets = {
-				menu: {
-					widget: 'Menu'
-				},
-				sitePage: {
-					widget: params['page']
-				}
+				menu: App.Menu,
+				sitePage: params['page']
 			};
 		} else {
-			vf.modules.Api.get('/api.php?method=User.auth', 'json', function (data) {
+			vf.Api.get('/api.php?method=User.auth', 'json', function (data) {
 				vf.user = data;
 				this.widgets = {
-					menu: {
-						widget: 'Menu'
-					}
+					menu: App.Menu
 				};
 				if (vf.user) {
-					this.widgets.sitePage = {
-						widget: params['page']
-					};
+					this.widgets.sitePage = params['page'];
 					this.activate(params);
 				}
 
@@ -578,7 +525,7 @@ vf.widget('Layout', {
 	}
 });
 
-vf.widget('Menu', {
+App.Menu = vf.Widget.extend({
 
 	container: '#menu',
 	template: 'menu/unathorized',

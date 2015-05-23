@@ -17,10 +17,11 @@ var paths = {
 		'public/scripts/scripts.js'
 	],
 	core: [
-		'vendor/follower/core/frontend/vf.js',
+		'vendor/follower/core/frontend/core.js',
 		'vendor/follower/core/frontend/**/*.js'
 	],
 	mycode: [
+		'public/test/js/index.js',
 		'public/test/js/**/*.js'
 	],
 	styles: ['public/styles/**/*.css'],

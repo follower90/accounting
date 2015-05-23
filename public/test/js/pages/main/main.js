@@ -1,11 +1,10 @@
-vf.widget('Main', {
+App.Main = vf.Widget.extend({
 
 	container: '#container',
 	template: 'main/main',
 	widgets: {
-		newEntry: {
-			widget: 'NewEntry'
-		}
+		new: App.NewEntry,
+		entries: App.List
 	},
 
 	beforeRender: function () {

@@ -1,4 +1,4 @@
-vf.widget('NewEntry', {
+App.NewEntry = vf.Widget.extend({
 
 	container: '#new_entry',
 	template: 'main/new',
@@ -26,7 +26,7 @@ vf.widget('NewEntry', {
 				.categories
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.modules.Api.get('/api.php?method=Category.list', 'json', function (data) {
+			vf.Api.get('/api.php?method=Category.list', 'json', function (data) {
 				this
 					.inlineWidgets
 					.categories
@@ -50,7 +50,7 @@ vf.widget('NewEntry', {
 			sum: _.find1('#sum').value
 		};
 
-		vf.modules.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
+		vf.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
 			console.log(arguments);
 		})
 	}
