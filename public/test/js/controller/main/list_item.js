@@ -1,4 +1,4 @@
-App.ListItem = vf.Widget.extend({
+App.ListItem = vf.Widget.extend('App.ListItem', {
 
 	container: '#list_items',
 	template: 'main/list_item',

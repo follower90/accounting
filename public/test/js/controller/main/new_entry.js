@@ -1,4 +1,4 @@
-App.NewEntry = vf.Widget.extend({
+App.NewEntry = vf.Widget.extend('App.NewEntry', {
 
 	container: '#new_entry',
 	template: 'main/new',
@@ -7,7 +7,7 @@ App.NewEntry = vf.Widget.extend({
 		categories: {
 			container: '.select-categories',
 			dom: '<select class="form-control" id="type" name="types">{{options}}</select>',
-			widget: 'Select_Box'
+			widget: vf.widgets.Select_Box
 		}
 	},
 

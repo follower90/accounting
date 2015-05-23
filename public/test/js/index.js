@@ -1,14 +1,11 @@
 var App = {};
 
-App.Router = vf.Router.extend({
-	routes: {
-		'#/': {page: App.Layout, params: {page: App.Main}},
-		'#/profile': {page: App.Layout, params: {page: App.Profile}}
-	}
+vf.require(['App.Router'], function(Router) {
+
+	vf.registerOption('templates', 'public/test/templates/');
+
+	window.onload = function () {
+		Router.run();
+	};
+
 });
-
-vf.registerOption('templates', 'public/test/js/templates/');
-
-window.onload = function () {
-	App.Router.run();
-};
