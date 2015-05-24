@@ -299,6 +299,7 @@ vf.module('Widget', {
 		} else {
 			this.loadTemplate();
 		}
+
 	},
 
 	loadTemplate: function () {
@@ -310,11 +311,12 @@ vf.module('Widget', {
 	},
 
 	load: function() {
-		this.includeWidgets();
-		this.beforeRender();
-		this.render();
-		this.afterRender();
-		this.registerDOMHandlers();
+		if (this.autoRender != false) {
+			this.includeWidgets();
+			this.beforeRender();
+			this.render();
+			this.afterRender();
+		}
 	},
 
 	setTemplateOptions: function(obj) {
@@ -335,6 +337,8 @@ vf.module('Widget', {
 		} else {
 			throw 'Container error';
 		}
+
+		this.registerDOMHandlers();
 	},
 
 	afterRender: function() {
@@ -567,7 +571,7 @@ vf.require(['App.Main', 'App.Profile', 'App.Layout'],
 		routes: {
 			'#/': {page: Layout, params: {page: Main}},
 			'#/profile': {page: Layout, params: {page: Profile}},
-			'#/logout': {page: Layout, params: {page: Profile, action: 'logout'}}
+			'#/logout': {page: Layout, params: {action: 'logout'}}
 		}
 	});
 });
@@ -581,24 +585,36 @@ vf.require(['App.Menu'], function(Menu) {
 
 		beforeActivate: function (params) {
 
+			if (params['action'] == 'logout') {
+				this.logout();
+				return false;
+			}
+
+			this.widgets = {};
+			this.widgets.menu = Menu;
+
 			if (vf.user) {
-				this.widgets.menu = Menu;
 				this.widgets.sitePage = params['page'];
+				this.widgets.menu.render();
 			} else {
 				vf.Api.get('/api.php?method=User.auth', 'json', function (data) {
 					vf.user = data;
-					this.widgets = {
-						menu: Menu
-					};
-
 					if (vf.user) {
-
 						this.widgets.sitePage = params['page'];
 						this.activate(params);
 					}
 
+					this.widgets.menu.activate();
+					this.widgets.menu.render();
 				}.bind(this));
 			}
+		},
+
+		logout: function() {
+			vf.Api.get('/api.php?method=User.logout', 'json', function () {
+				vf.user = null;
+				vf.site.gotoPage('/');
+			});
 		}
 	});
 });
@@ -606,6 +622,7 @@ App.Menu = vf.Widget.extend('App.Menu', {
 
 	container: '#menu',
 	template: 'menu/unauthorized',
+	autoRender: false,
 
 	domHandlers: {
 		login: {
@@ -626,13 +643,15 @@ App.Menu = vf.Widget.extend('App.Menu', {
 	},
 
 	login: function() {
+		var _ = this;
+
 		var params = {
-			name: 'follower',
-			pass: 'v6v6v6'
+			name: _.find1('.input-name').value,
+			pass: _.find1('.input-pass').value
 		};
 
-		vf.Api.post('/api.php?method=User.login', 'json', params, function (data) {
-			vf.Api.post('/api.php?method=User.auth', 'json', params, function (data) {
+		vf.Api.post('/api.php?method=User.login', 'json', params, function () {
+			vf.Api.get('/api.php?method=User.auth', 'json', function () {
 				App.Router.update();
 			});
 		});

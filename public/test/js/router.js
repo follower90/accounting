@@ -5,7 +5,7 @@ vf.require(['App.Main', 'App.Profile', 'App.Layout'],
 		routes: {
 			'#/': {page: Layout, params: {page: Main}},
 			'#/profile': {page: Layout, params: {page: Profile}},
-			'#/logout': {page: Layout, params: {page: Profile, action: 'logout'}}
+			'#/logout': {page: Layout, params: {action: 'logout'}}
 		}
 	});
 });

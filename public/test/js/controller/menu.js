@@ -2,6 +2,7 @@ App.Menu = vf.Widget.extend('App.Menu', {
 
 	container: '#menu',
 	template: 'menu/unauthorized',
+	autoRender: false,
 
 	domHandlers: {
 		login: {
@@ -22,13 +23,15 @@ App.Menu = vf.Widget.extend('App.Menu', {
 	},
 
 	login: function() {
+		var _ = this;
+
 		var params = {
-			name: 'follower',
-			pass: 'v6v6v6'
+			name: _.find1('.input-name').value,
+			pass: _.find1('.input-pass').value
 		};
 
-		vf.Api.post('/api.php?method=User.login', 'json', params, function (data) {
-			vf.Api.post('/api.php?method=User.auth', 'json', params, function (data) {
+		vf.Api.post('/api.php?method=User.login', 'json', params, function () {
+			vf.Api.get('/api.php?method=User.auth', 'json', function () {
 				App.Router.update();
 			});
 		});
