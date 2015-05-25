@@ -1,24 +1,13 @@
-App.Menu = vf.Widget.extend('App.Menu', {
+App.MenuNotAuthorized = vf.Widget.extend('App.MenuNotAuthorized', {
 
 	container: '#menu',
 	template: 'menu/unauthorized',
-	autoRender: false,
 
 	domHandlers: {
 		login: {
 			element: '.btn-login',
 			event: 'click',
 			callback: 'login'
-		}
-	},
-
-	beforeActivate: function () {
-		this.dom = null;
-		if (vf.user) {
-			this.template = 'menu/authorized';
-			this.setTemplateOptions({name: vf.user.name });
-		} else {
-			this.template = 'menu/unauthorized';
 		}
 	},
 

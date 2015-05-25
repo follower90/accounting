@@ -37,6 +37,11 @@ class ProjectBuilder
 			case 'status' :
 				$this->applyToAllRepo($this->args[1]);
 				break;
+
+			case 'reset' :
+				$this->applyToAllRepo($this->args[1], $this->args[2]);
+				break;
+
 			case 'push' :
 			case 'pull' :
 				$this->applyToAllRepo($this->args[1], $this->args[2] . ' ' . $this->args[3]);

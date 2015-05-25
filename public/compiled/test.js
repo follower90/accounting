@@ -293,13 +293,14 @@ vf.module('Widget', {
 		this.params = params;
 		this.beforeActivate(this.params);
 
-		if (this.dom) {
-			this.load();
-			this.renderWidgets();
-		} else {
-			this.loadTemplate();
+		if (this.autoRender != false || !params) {
+			if (this.dom) {
+				this.load();
+				this.renderWidgets();
+			} else {
+				this.loadTemplate();
+			}
 		}
-
 	},
 
 	loadTemplate: function () {
@@ -311,12 +312,10 @@ vf.module('Widget', {
 	},
 
 	load: function() {
-		if (this.autoRender != false) {
-			this.includeWidgets();
-			this.beforeRender();
-			this.render();
-			this.afterRender();
-		}
+		this.includeWidgets();
+		this.beforeRender();
+		this.render();
+		this.afterRender();
 	},
 
 	setTemplateOptions: function(obj) {
@@ -534,6 +533,45 @@ App.NewEntry = vf.Widget.extend('App.NewEntry', {
 	}
 });
 
+App.MenuAuthorized = vf.Widget.extend('App.MenuAuthorized', {
+
+	container: '#menu',
+	template: 'menu/authorized',
+
+	beforeActivate: function () {
+		this.setTemplateOptions({name: vf.user.name });
+	}
+});
+
+App.MenuNotAuthorized = vf.Widget.extend('App.MenuNotAuthorized', {
+
+	container: '#menu',
+	template: 'menu/unauthorized',
+
+	domHandlers: {
+		login: {
+			element: '.btn-login',
+			event: 'click',
+			callback: 'login'
+		}
+	},
+
+	login: function() {
+		var _ = this;
+
+		var params = {
+			name: _.find1('.input-name').value,
+			pass: _.find1('.input-pass').value
+		};
+
+		vf.Api.post('/api.php?method=User.login', 'json', params, function () {
+			vf.Api.get('/api.php?method=User.auth', 'json', function () {
+				App.Router.update();
+			});
+		});
+	}
+});
+
 App.EditProfile = vf.Widget.extend('App.EditProfile', {
 
 	container: '#edit-profile',
@@ -576,7 +614,7 @@ vf.require(['App.Main', 'App.Profile', 'App.Layout'],
 	});
 });
 
-vf.require(['App.Menu'], function(Menu) {
+vf.require(['App.MenuAuthorized', 'App.MenuNotAuthorized'], function(MenuAuthorized, MenuNotAuthorized) {
 
 	App.Layout = vf.Widget.extend('App.Layout', {
 
@@ -591,21 +629,23 @@ vf.require(['App.Menu'], function(Menu) {
 			}
 
 			this.widgets = {};
-			this.widgets.menu = Menu;
 
 			if (vf.user) {
+				this.widgets.menu = MenuAuthorized;
 				this.widgets.sitePage = params['page'];
-				this.widgets.menu.render();
+				this.widgets.menu.activate()
 			} else {
 				vf.Api.get('/api.php?method=User.auth', 'json', function (data) {
 					vf.user = data;
 					if (vf.user) {
+						this.widgets.menu = MenuAuthorized;
 						this.widgets.sitePage = params['page'];
 						this.activate(params);
+					} else {
+						this.widgets.menu = MenuNotAuthorized;
+						this.widgets.menu.activate();
 					}
 
-					this.widgets.menu.activate();
-					this.widgets.menu.render();
 				}.bind(this));
 			}
 		},
@@ -617,43 +657,4 @@ vf.require(['App.Menu'], function(Menu) {
 			});
 		}
 	});
-});
-App.Menu = vf.Widget.extend('App.Menu', {
-
-	container: '#menu',
-	template: 'menu/unauthorized',
-	autoRender: false,
-
-	domHandlers: {
-		login: {
-			element: '.btn-login',
-			event: 'click',
-			callback: 'login'
-		}
-	},
-
-	beforeActivate: function () {
-		this.dom = null;
-		if (vf.user) {
-			this.template = 'menu/authorized';
-			this.setTemplateOptions({name: vf.user.name });
-		} else {
-			this.template = 'menu/unauthorized';
-		}
-	},
-
-	login: function() {
-		var _ = this;
-
-		var params = {
-			name: _.find1('.input-name').value,
-			pass: _.find1('.input-pass').value
-		};
-
-		vf.Api.post('/api.php?method=User.login', 'json', params, function () {
-			vf.Api.get('/api.php?method=User.auth', 'json', function () {
-				App.Router.update();
-			});
-		});
-	}
 });

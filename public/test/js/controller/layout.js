@@ -1,4 +1,4 @@
-vf.require(['App.Menu'], function(Menu) {
+vf.require(['App.MenuAuthorized', 'App.MenuNotAuthorized'], function(MenuAuthorized, MenuNotAuthorized) {
 
 	App.Layout = vf.Widget.extend('App.Layout', {
 
@@ -13,21 +13,23 @@ vf.require(['App.Menu'], function(Menu) {
 			}
 
 			this.widgets = {};
-			this.widgets.menu = Menu;
 
 			if (vf.user) {
+				this.widgets.menu = MenuAuthorized;
 				this.widgets.sitePage = params['page'];
-				this.widgets.menu.render();
+				this.widgets.menu.activate()
 			} else {
 				vf.Api.get('/api.php?method=User.auth', 'json', function (data) {
 					vf.user = data;
 					if (vf.user) {
+						this.widgets.menu = MenuAuthorized;
 						this.widgets.sitePage = params['page'];
 						this.activate(params);
+					} else {
+						this.widgets.menu = MenuNotAuthorized;
+						this.widgets.menu.activate();
 					}
 
-					this.widgets.menu.activate();
-					this.widgets.menu.render();
 				}.bind(this));
 			}
 		},
