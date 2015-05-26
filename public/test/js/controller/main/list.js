@@ -1,4 +1,4 @@
-App.List = vf.Widget.extend('App.List', {
+vf.registerComponent('Entry_List', {
 
 	container: '#main_list',
 	template: 'main/list',

@@ -1,15 +1,12 @@
-vf.require(['App.List', 'App.NewEntry'], function(List, NewEntry) {
+vf.registerComponent('Main_Page', {
 
-	App.Main = vf.Widget.extend('App.Main', {
+	container: '#container',
+	template: 'main/main',
+	components: {
+		new: 'New_Entry',
+		entries: 'Entry_List'
+	},
 
-		container: '#container',
-		template: 'main/main',
-		widgets: {
-			new: NewEntry,
-			entries: List
-		},
-
-		beforeRender: function () {
-		}
-	});
+	beforeRender: function () {
+	}
 });

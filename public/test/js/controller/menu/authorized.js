@@ -1,9 +1,9 @@
-App.MenuAuthorized = vf.Widget.extend('App.MenuAuthorized', {
+vf.registerComponent('Menu_Authorized', {
 
 	container: '#menu',
 	template: 'menu/authorized',
 
 	beforeActivate: function () {
-		this.setTemplateOptions({name: vf.user.name });
+		this.setTemplateOptions({name: vf.site.user.name });
 	}
 });

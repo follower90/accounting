@@ -1,19 +1,16 @@
-vf.require(['App.EditProfile'], function(EditProfile) {
+vf.registerComponent('Profile', {
+	container: '#container',
+	template: 'profile/profile',
+	components: {
+		editProfile: 'Edit_Profile'
+	},
 
-	App.Profile = vf.Widget.extend('App.Profile', {
-		container: '#container',
-		template: 'profile/profile',
-		widgets: {
-			editProfile: EditProfile
-		},
-
-		beforeActivate: function(params) {
-			if (!!params && params['action'] == 'logout') {
-				vf.Api.get('/api.php?method=User.logout', 'json', function () {
-					vf.user = null;
-					vf.site.gotoPage('/');
-				});
-			}
+	beforeActivate: function (params) {
+		if (!!params && params['action'] == 'logout') {
+			vf.module('Api').get('/api.php?method=User.logout', 'json', function () {
+				vf.site.user = null;
+				vf.site.gotoPage('/');
+			});
 		}
-	});
+	}
 });

@@ -1,13 +1,13 @@
-App.NewEntry = vf.Widget.extend('App.NewEntry', {
+vf.registerComponent('New_Entry', {
 
 	container: '#new_entry',
 	template: 'main/new',
 	categories: false,
-	widgets: {
+	components: {
 		categories: {
 			container: '.select-categories',
 			dom: '<select class="form-control" id="type" name="types">{{options}}</select>',
-			widget: vf.widgets.Select_Box
+			use: 'Select_Box'
 		}
 	},
 
@@ -21,22 +21,16 @@ App.NewEntry = vf.Widget.extend('App.NewEntry', {
 
 	beforeRender: function () {
 		if (!this.categories) {
-			this
-				.inlineWidgets
-				.categories
+			this.getInlineComponent('categories')
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.Api.get('/api.php?method=Category.list', 'json', function (data) {
-				this
-					.inlineWidgets
-					.categories
+			vf.module('Api').get('/api.php?method=Category.list', 'json', function (data) {
+				this.getInlineComponent('categories')
 					.setTemplateOptions({data: data}).load();
 				this.categories = data;
 			}.bind(this));
 		} else {
-			this
-				.inlineWidgets
-				.categories
+			this.getInlineComponent('categories')
 				.setTemplateOptions({data: this.categories});
 		}
 	},
@@ -50,7 +44,7 @@ App.NewEntry = vf.Widget.extend('App.NewEntry', {
 			sum: _.find1('#sum').value
 		};
 
-		vf.Api.post('/api.php?method=Entry.save', 'json', entry, function() {
+		vf.module('Api').post('/api.php?method=Entry.save', 'json', entry, function() {
 			console.log(arguments);
 		})
 	}

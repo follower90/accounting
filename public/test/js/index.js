@@ -1,11 +1,5 @@
-var App = {};
+vf.registerOption('templates', 'public/test/templates/');
 
-vf.require(['App.Router'], function(Router) {
-
-	vf.registerOption('templates', 'public/test/templates/');
-
-	window.onload = function () {
-		Router.run();
-	};
-
-});
+window.onload = function () {
+	vf.module('Router').run();
+};

@@ -1,9 +1,9 @@
-App.EditProfile = vf.Widget.extend('App.EditProfile', {
+vf.registerComponent('Edit_Profile', {
 
 	container: '#edit-profile',
 	template: 'profile/form',
 
 	beforeRender: function () {
-		this.setTemplateOptions({name: vf.user.name, login: vf.user.login });
+		this.setTemplateOptions({name: vf.site.user.name, login: vf.site.user.login });
 	}
 });

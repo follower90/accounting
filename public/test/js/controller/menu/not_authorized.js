@@ -1,4 +1,4 @@
-App.MenuNotAuthorized = vf.Widget.extend('App.MenuNotAuthorized', {
+vf.registerComponent('Menu_NotAuthorized', {
 
 	container: '#menu',
 	template: 'menu/unauthorized',
@@ -19,9 +19,9 @@ App.MenuNotAuthorized = vf.Widget.extend('App.MenuNotAuthorized', {
 			pass: _.find1('.input-pass').value
 		};
 
-		vf.Api.post('/api.php?method=User.login', 'json', params, function () {
-			vf.Api.get('/api.php?method=User.auth', 'json', function () {
-				App.Router.update();
+		vf.module('Api').post('/api.php?method=User.login', 'json', params, function () {
+			vf.module('Api').get('/api.php?method=User.auth', 'json', function () {
+				vf.module('Router').update();
 			});
 		});
 	}
