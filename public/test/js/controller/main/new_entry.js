@@ -26,8 +26,8 @@ vf.registerComponent('New_Entry', {
 
 			vf.module('Api').get('/api.php?method=Category.list', 'json', function (data) {
 				this.getInlineComponent('categories')
-					.setTemplateOptions({data: data}).load();
-				this.categories = data;
+					.setTemplateOptions({data: data.response}).load();
+				this.categories = data.response;
 			}.bind(this));
 		} else {
 			this.getInlineComponent('categories')

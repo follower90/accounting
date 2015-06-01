@@ -7,7 +7,7 @@ use Core\Router;
 
 class Test extends Base
 {
-	public function methodTest()
+	public function methodIndex()
 	{
 		return $this->view->render('public/test/index.html');
 	}

@@ -8,10 +8,6 @@ class Client
 {
 	public static function register()
 	{
-		Router::register(['/', 'get'], 'Index', 'index', []);
-
-		Router::register(['/test', 'get'], 'Test', 'test', []);
-
 		Router::register(['/add', 'post'], 'Index', 'newEntry', []);
 		
 		Router::register(['/login', 'post'], 'User', 'login', []);
@@ -19,7 +15,5 @@ class Client
 
 		Router::register(['/profile', 'get'], 'Profile', 'index', []);
 		Router::register(['/profile', 'post'], 'Profile', 'save', []);
-
-		Router::register(['/example/+', 'get'], 'Example', 'index', []);
 	}
 }

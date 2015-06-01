@@ -17,9 +17,10 @@ class Base extends EntryPoint
 		$this->setLib('\Accounting\Controller');
 
 		$app = new App($this);
-		$app->run();
 
 		$authorize = new \Core\Authorize('User');
 		$authorize->getUser();
+
+		$app->run();
 	}
 }

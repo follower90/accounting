@@ -20,7 +20,7 @@ vf.registerComponent('Layout', {
 
 			if (!params.ready) {
 				vf.module('Api').get('/api.php?method=User.auth', 'json', function (data) {
-					vf.site.user = data;
+					vf.site.user = data.response;
 					if (vf.site.user) {
 						this.components.menu = 'Menu_Authorized';
 						this.components.sitePage = params['page'];
