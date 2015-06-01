@@ -9,29 +9,28 @@ class User extends Api
 {
 	public function methodAuth()
 	{
-		$this->authorizer = new Authorize('User');
-		$this->user = $this->authorizer->getUser();
+		$authorize = new Authorize('User');
+		$user = $authorize->getUser();
 
-		return $this->user ? $this->user->getValues() : false;
+		return $user ? $user->getValues() : false;
 	}
-
 
 	public function methodLogin()
 	{
-		$this->authorizer = new Authorize('User');
-		$this->authorizer->login($this->request('name'), $this->request('pass'),
+		$authorize = new Authorize('User');
+		$authorize->login($this->request('name'), $this->request('pass'),
 			function($password) {
 				return \Accounting\Controller\User::passwordHash($password);
 			}
 		);
 
-		return $this->authorizer->getUser();
+		return $authorize->getUser();
 	}
 
 	public function methodLogout()
 	{
-		$this->authorizer = new Authorize('User');
-		$this->authorizer->logout();
+		$authorize = new Authorize('User');
+		$authorize->logout();
 
 		return true;
 	}

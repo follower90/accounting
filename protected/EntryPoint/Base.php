@@ -18,5 +18,8 @@ class Base extends EntryPoint
 
 		$app = new App($this);
 		$app->run();
+
+		$authorize = new \Core\Authorize('User');
+		$authorize->getUser();
 	}
 }

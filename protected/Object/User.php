@@ -4,18 +4,22 @@ namespace Accounting\Object;
 
 class User extends \Core\Object\User
 {
-	protected $_table = 'User';
+	protected static $_config;
 
-	public function fields()
+	public function getConfig()
 	{
-		$fields = [
-			'name' => [
-				'type' => 'varchar',
-				'default' => '',
-				'null' => false,
-			],
-		];
+		if (empty(self::$_config)) {
+			self::$_config = clone parent::getConfig();
+			self::$_config->setTable('User');
+			self::$_config->setFields([
+				'name' => [
+					'type' => 'varchar',
+					'default' => '',
+					'null' => false,
+				],
+			]);
+		}
 
-		return array_merge($fields, parent::fields());
+		return self::$_config;
 	}
 }

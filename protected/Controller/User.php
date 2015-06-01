@@ -9,7 +9,7 @@ class User extends Base
 {
 	public function methodLogin()
 	{
-		$this->authorizer->login($this->request('name'), $this->request('pass'),
+		$this->authorize->login($this->request('name'), $this->request('pass'),
 			function($password) {
 				return self::passwordHash($password);
 			}
@@ -20,7 +20,7 @@ class User extends Base
 	
 	public function methodLogout()
 	{
-		$this->authorizer->logout();
+		$this->authorize->logout();
 		Router::redirect('/');
 	}
 

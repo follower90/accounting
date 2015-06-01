@@ -8,13 +8,13 @@ use Core\App;
 
 class Base extends Controller
 {
-	protected $authorizer;
+	protected $authorize;
 	protected $user = false;
 
 	public function __construct()
 	{
-		$this->authorizer = new Authorize('User');
-		$this->user = $this->authorizer->getUser();
+		$this->authorize = new Authorize('User');
+		$this->user = $this->authorize->getUser();
 
 		parent::__construct();
 	}

@@ -45,7 +45,14 @@ vf.registerComponent('New_Entry', {
 		};
 
 		vf.module('Api').post('/api.php?method=Entry.save', 'json', entry, function() {
-			console.log(arguments);
+			vf.module('Notification').send(
+				'Entry added',
+				'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+				'Create entry success',
+				function() {
+					console.log('44545');
+				}
+			);
 		})
 	}
 });

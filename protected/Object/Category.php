@@ -4,39 +4,36 @@ namespace Accounting\Object;
 
 class Category extends \Core\Object
 {
-	protected $_table = 'Category';
-
 	const TYPE_EARNING = '+';
 	const TYPE_EXPENSE = '-';
 
-	public function fields()
+	protected static $_config;
+
+	public function getConfig()
 	{
-		$fields = [
-			'type' => [
-				'type' => 'int',
-				'default' => null,
-				'null' => false,
-			],
-			'name' => [
-				'type' => 'varchar',
-				'default' => '',
-				'null' => false,
-			],
-		];
+		if (empty(self::$_config)) {
+			self::$_config = clone parent::getConfig();
+			self::$_config->setTable('Category');
+			self::$_config->setFields([
+				'type' => [
+					'type' => 'int',
+					'default' => null,
+					'null' => false,
+				],
+				'name' => [
+					'type' => 'varchar',
+					'default' => '',
+					'null' => false,
+				],
+			]);
+		}
 
-		return array_merge($fields, parent::fields());
-	}
+		\Core\Orm::registerRelation(
+			['type' => 'multiple', 'alias' => 'user', 'table' => 'User__Category'],
+			['class' => 'Category'],
+			['class' => 'User']
+		);
 
-	public function relations()
-	{
-		$relations = [
-			'user' => [
-				'multiple' => true,
-				'class' => 'User',
-				'table' => 'User__Category'
-			]
-		];
-
-		return $relations;
+		return self::$_config;
 	}
 }
