@@ -18,10 +18,11 @@ class Api extends EntryPoint
 		$this->setLib('\Accounting\Api');
 
 		$app = new App($this);
-		$app->run();
 
 		$authorize = new \Core\Authorize('User');
 		$authorize->getUser();
+
+		$app->run();
 	}
 
 	public function debug()

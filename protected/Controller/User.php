@@ -11,7 +11,7 @@ class User extends Base
 	{
 		$this->authorize->login($this->request('name'), $this->request('pass'),
 			function($password) {
-				return self::passwordHash($password);
+				return \Accounting\Object\User::hashPassword($password);
 			}
 		);
 
@@ -22,10 +22,5 @@ class User extends Base
 	{
 		$this->authorize->logout();
 		Router::redirect('/');
-	}
-
-	public static function passwordHash($password)
-	{
-		return md5($password);
 	}
 }

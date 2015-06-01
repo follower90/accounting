@@ -20,7 +20,7 @@ class User extends Api
 		$authorize = new Authorize('User');
 		$authorize->login($this->request('name'), $this->request('pass'),
 			function($password) {
-				return \Accounting\Controller\User::passwordHash($password);
+				return \Accounting\Object\User::hashPassword($password);
 			}
 		);
 
