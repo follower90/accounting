@@ -1,6 +1,7 @@
 {
   "require": {
     "follower/core": "dev-master"
+    "follower/admin": "dev-master"
   },
   "autoload": {
     "classmap": [

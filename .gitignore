@@ -1,5 +1,6 @@
 .idea
+.composer.lock
+config.php
 node_modules
 vendor
-config.php
 public/compiled
