@@ -3,6 +3,9 @@
     "follower/core": "dev-master"
     "follower/admin": "dev-master"
   },
+  "require-dev": {
+    "phpdocumentor/phpdocumentor": "2.*"
+  },
   "autoload": {
     "classmap": [
       "vendor/follower/core/backend",
