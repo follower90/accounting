@@ -44,6 +44,12 @@ class ProjectBuilder
 
 			case 'push' :
 			case 'pull' :
+				if (!$this->args[2]) {
+					$this->args[2] = 'origin';
+				}
+				if (!$this->args[3]) {
+					$this->args[3] = 'master';
+				}
 				$this->applyToAllRepo($this->args[1], $this->args[2] . ' ' . $this->args[3]);
 				break;
 
