@@ -6,6 +6,7 @@
   "autoload": {
     "classmap": [
       "vendor/follower/core/backend",
+      "vendor/follower/admin/backend",
       "protected"
     ]
   }
