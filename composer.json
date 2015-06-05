@@ -1,10 +1,7 @@
 {
   "require": {
-    "follower/core": "dev-master"
+    "follower/core": "dev-master",
     "follower/admin": "dev-master"
-  },
-  "require-dev": {
-    "phpdocumentor/phpdocumentor": "2.*"
   },
   "autoload": {
     "classmap": [
