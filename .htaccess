@@ -1,12 +1,12 @@
 AddDefaultCharset utf-8
-AddType text/x-component .htc
-Options +Includes +FollowSymLinks -Indexes
-DirectoryIndex index.php
-
 RewriteEngine on
+
+RewriteRule ^admin/(.*)$ admin/index.php [QSA,L]
+RewriteRule ^admin/api/(.*)$ admin/api.php [QSA,L]
+
+RewriteRule ^api/(.*)$ api.php [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^(.*)$ index.php [L,QSA]
-RewriteRule ^api/(.*)$ api.php [QSA,L]
+RewriteRule ^(.*)$ index.php [QSA,L]
