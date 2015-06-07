@@ -271,9 +271,9 @@ vf.registerModule('Component', {
 		var container = vf.dom.find1(this.container);
 
 		if (container) {
-			//$(this.container).fadeOut(0);
+			$(this.container).fadeOut(0);
 			container.innerHTML = vf.utils.render(this.dom, this.templateOptions);
-			//	$(this.container).fadeIn(500);
+			$(this.container).fadeIn(500);
 		} else {
 			throw 'Container error';
 		}
@@ -312,11 +312,11 @@ vf.registerModule('Component', {
 	},
 
 	renderComponents: function () {
-		for (var w in this.inlineComponents) {
-			var widget = this.inlineComponents[w];
+		for (var c in this.inlineComponents) {
+			var component = this.inlineComponents[c];
 
-			if (widget) {
-				widget.activate(this.params);
+			if (component) {
+				component.activate(this.params);
 			}
 		}
 	},
@@ -416,14 +416,14 @@ vf.registerModule('Router', {
 				var route = vf._registry.routes[url];
 
 				var params = route.params || {},
-					widget = vf._registry.components[route.page];
+					component = vf._registry.components[route.page];
 
 				params = vf.utils.extend(args, params);
 
-				if (widget) {
-					widget.activate(params);
+				if (component) {
+					component.activate(params);
 				} else {
-					vf.error('Widget: ' + route.page + ' not found');
+					vf.error('Component: ' + route.page + ' not found');
 				}
 			}
 		}
@@ -567,32 +567,6 @@ vf.registerComponent('New_Entry', {
 	}
 });
 
-vf.registerComponent('Edit_Profile', {
-
-	container: '#edit-profile',
-	template: 'profile/form',
-
-	beforeRender: function () {
-		this.setTemplateOptions({name: vf.site.user.name, login: vf.site.user.login });
-	}
-});
-
-vf.registerComponent('Profile', {
-	container: '#container',
-	template: 'profile/profile',
-	components: {
-		editProfile: 'Edit_Profile'
-	},
-
-	beforeActivate: function (params) {
-		if (!!params && params['action'] == 'logout') {
-			vf.module('Api').get('/api.php?method=User.logout', 'json', function () {
-				vf.site.user = null;
-				vf.site.gotoPage('/');
-			});
-		}
-	}
-});
 vf.registerComponent('Menu_Authorized', {
 
 	container: '#menu',
@@ -632,6 +606,32 @@ vf.registerComponent('Menu_NotAuthorized', {
 	}
 });
 
+vf.registerComponent('Edit_Profile', {
+
+	container: '#edit-profile',
+	template: 'profile/form',
+
+	beforeRender: function () {
+		this.setTemplateOptions({name: vf.site.user.name, login: vf.site.user.login });
+	}
+});
+
+vf.registerComponent('Profile', {
+	container: '#container',
+	template: 'profile/profile',
+	components: {
+		editProfile: 'Edit_Profile'
+	},
+
+	beforeActivate: function (params) {
+		if (!!params && params['action'] == 'logout') {
+			vf.module('Api').get('/api.php?method=User.logout', 'json', function () {
+				vf.site.user = null;
+				vf.site.gotoPage('/');
+			});
+		}
+	}
+});
 vf.registerRoutes({
 	'#/': {page: 'Layout', params: {page: 'Main_Page'}},
 	'#/profile': {page: 'Layout', params: {page: 'Profile'}},
@@ -657,7 +657,6 @@ vf.registerComponent('Layout', {
 			this.components.sitePage = params['page'];
 		} else {
 			this.components.menu = 'Menu_NotAuthorized';
-
 			if (!params.ready) {
 				vf.module('Api').get('/api.php?method=User.auth', 'json', function (data) {
 					vf.site.user = data.response;

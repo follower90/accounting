@@ -18,6 +18,7 @@ var paths = {
 	],
 	core: [
 		'vendor/follower/core/frontend/vf.js',
+		'vendor/follower/core/frontend/modules/**/*.js',
 		'vendor/follower/core/frontend/**/*.js'
 	],
 	mycode: [

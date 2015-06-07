@@ -17,7 +17,6 @@ vf.registerComponent('Layout', {
 			this.components.sitePage = params['page'];
 		} else {
 			this.components.menu = 'Menu_NotAuthorized';
-
 			if (!params.ready) {
 				vf.module('Api').get('/api.php?method=User.auth', 'json', function (data) {
 					vf.site.user = data.response;
