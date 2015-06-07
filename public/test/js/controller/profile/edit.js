@@ -1,9 +1,9 @@
-vf.registerComponent('Edit_Profile', {
+app.registerComponent('Edit_Profile', {
 
 	container: '#edit-profile',
 	template: 'profile/form',
 
 	beforeRender: function () {
-		this.setTemplateOptions({name: vf.site.user.name, login: vf.site.user.login });
+		this.setTemplateOptions({name: app.site.user.name, login: app.site.user.login });
 	}
 });

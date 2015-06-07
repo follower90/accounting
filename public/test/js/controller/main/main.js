@@ -1,4 +1,4 @@
-vf.registerComponent('Main_Page', {
+app.registerComponent('Main_Page', {
 
 	container: '#container',
 	template: 'main/main',

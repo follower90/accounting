@@ -1,4 +1,4 @@
-vf.registerComponent('Profile', {
+app.registerComponent('Profile', {
 	container: '#container',
 	template: 'profile/profile',
 	components: {
@@ -7,9 +7,9 @@ vf.registerComponent('Profile', {
 
 	beforeActivate: function (params) {
 		if (!!params && params['action'] == 'logout') {
-			vf.module('Api').get('/api.php?method=User.logout', 'json', function () {
-				vf.site.user = null;
-				vf.site.gotoPage('/');
+			app.module('Api').get('/api.php?method=User.logout', 'json', function () {
+				app.site.user = null;
+				app.site.gotoPage('/');
 			});
 		}
 	}

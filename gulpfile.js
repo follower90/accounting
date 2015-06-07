@@ -17,7 +17,7 @@ var paths = {
 		'public/scripts/scripts.js'
 	],
 	core: [
-		'vendor/follower/core/frontend/vf.js',
+		'vendor/follower/core/frontend/app.js',
 		'vendor/follower/core/frontend/modules/**/*.js',
 		'vendor/follower/core/frontend/**/*.js'
 	],

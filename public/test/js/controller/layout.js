@@ -1,4 +1,4 @@
-vf.registerComponent('Layout', {
+app.registerComponent('Layout', {
 
 	container: '#app',
 	template: 'layout',
@@ -12,15 +12,15 @@ vf.registerComponent('Layout', {
 
 		this.components = {};
 
-		if (vf.site.user) {
+		if (app.site.user) {
 			this.components.menu = 'Menu_Authorized';
 			this.components.sitePage = params['page'];
 		} else {
 			this.components.menu = 'Menu_NotAuthorized';
 			if (!params.ready) {
-				vf.module('Api').get('/api.php?method=User.auth', 'json', function (data) {
-					vf.site.user = data.response;
-					if (vf.site.user) {
+				app.module('Api').get('/api.php?method=User.auth', 'json', function (data) {
+					app.site.user = data.response;
+					if (app.site.user) {
 						this.components.menu = 'Menu_Authorized';
 						this.components.sitePage = params['page'];
 					} else {
@@ -35,9 +35,9 @@ vf.registerComponent('Layout', {
 	},
 
 	logout: function () {
-		vf.module('Api').get('/api.php?method=User.logout', 'json', function () {
-			vf.site.user = null;
-			vf.site.gotoPage('/');
+		app.module('Api').get('/api.php?method=User.logout', 'json', function () {
+			app.site.user = null;
+			app.site.gotoPage('/');
 		});
 	}
 });

@@ -1,4 +1,4 @@
-vf.registerComponent('Menu_NotAuthorized', {
+app.registerComponent('Menu_NotAuthorized', {
 
 	container: '#menu',
 	template: 'menu/unauthorized',
@@ -19,9 +19,9 @@ vf.registerComponent('Menu_NotAuthorized', {
 			pass: _.find1('.input-pass').value
 		};
 
-		vf.module('Api').post('/api.php?method=User.login', 'json', params, function () {
-			vf.module('Api').get('/api.php?method=User.auth', 'json', function () {
-				vf.module('Router').update();
+		app.module('Api').post('/api.php?method=User.login', 'json', params, function () {
+			app.module('Api').get('/api.php?method=User.auth', 'json', function () {
+				app.module('Router').update();
 			});
 		});
 	}

@@ -1,4 +1,4 @@
-vf.registerComponent('New_Entry', {
+app.registerComponent('New_Entry', {
 
 	container: '#new_entry',
 	template: 'main/new',
@@ -24,7 +24,7 @@ vf.registerComponent('New_Entry', {
 			this.getInlineComponent('categories')
 				.setTemplateOptions({data: [{id: 0, name: 'Loading...'}]});
 
-			vf.module('Api').get('/api.php?method=Category.list', 'json', function (data) {
+			app.module('Api').get('/api.php?method=Category.list', 'json', function (data) {
 				this.getInlineComponent('categories')
 					.setTemplateOptions({data: data.response}).load();
 				this.categories = data.response;
@@ -44,8 +44,8 @@ vf.registerComponent('New_Entry', {
 			sum: _.find1('#sum').value
 		};
 
-		vf.module('Api').post('/api.php?method=Entry.save', 'json', entry, function() {
-			vf.module('Notification').send(
+		app.module('Api').post('/api.php?method=Entry.save', 'json', entry, function() {
+			app.module('Notification').send(
 				'Entry added',
 				'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
 				'Create entry success',
