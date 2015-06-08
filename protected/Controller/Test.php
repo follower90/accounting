@@ -11,4 +11,9 @@ class Test extends Base
 	{
 		return $this->view->render('public/test/index.html');
 	}
+
+	public function methodCss()
+	{
+		return $this->view->render('public/test/index2.html');
+	}
 }

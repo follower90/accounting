@@ -1,8 +1,12 @@
-var path = require('path');
-var gulp = require('gulp');
-var concat = require('gulp-concat');
-var autoprefixer = require('gulp-autoprefixer');
-var uglify = require('gulp-uglify');
+
+var path = require('path'),
+	gulp = require('gulp'),
+	concat = require('gulp-concat'),
+	autoprefixer = require('gulp-autoprefixer'),
+	uglify = require('gulp-uglify'),
+	stylus = require('gulp-stylus'),
+	ks = require('kouto-swiss'),
+	minify = require('gulp-minify-css');
 
 var paths = {
 	scripts: [
@@ -25,11 +29,18 @@ var paths = {
 		'public/test/js/index.js',
 		'public/test/js/**/*.js'
 	],
+	cssframework: {
+		src: [
+			'vendor/follower/core/stylus/reset.styl',
+			'vendor/follower/core/stylus/**/*.styl'
+		],
+		dest: 'public/test/css'
+	},
 	styles: ['public/styles/**/*.css'],
 	compiled: 'public/compiled'
 };
 
-gulp.task('scripts', function() {
+gulp.task('scripts', function () {
 
 	// Minify all JavaScript code
 
@@ -39,7 +50,7 @@ gulp.task('scripts', function() {
 		.pipe(gulp.dest(paths.compiled));
 });
 
-gulp.task('test', function() {
+gulp.task('test', function () {
 
 	// Minify all JavaScript code
 
@@ -48,10 +59,25 @@ gulp.task('test', function() {
 		.pipe(gulp.dest(paths.compiled));
 });
 
+gulp.task('cssframework', function () {
 
-gulp.task('styles', function() {
+	// Build css framework Stylus files
+	console.log(paths.cssframework.dest);
+	return gulp.src(paths.cssframework.src)
+		.pipe(stylus({
+			compress: false,
+			use: [ks()],
+			linenos: false
+		}))
+		.pipe(concat('core.css'))
+		//.pipe(minify({compatibility: 'ie8'}))
+		.pipe(autoprefixer('last 2 versions'))
+		.pipe(gulp.dest(paths.cssframework.dest));
+});
 
-	// Compile Stylus styles to CSS
+gulp.task('styles', function () {
+
+	// Compile styles
 
 	return gulp.src(paths.styles)
 		.pipe(concat('style.css'))
