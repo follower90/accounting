@@ -169,7 +169,7 @@ i {
   text-align: center;
   color: #000;
 }
-@media all and (max-width: 960px) {
+@media screen and (max-width: 800px) and (orientation: landscape) {
   .col-1 {
     width: 8.033333333333333%;
   }
@@ -204,7 +204,7 @@ i {
     width: 83.03333333333335%;
   }
 }
-@media all and (max-width: 960px) and (max-width: 800px) {
+@media screen and (max-width: 800px) and (orientation: landscape) and (max-width: 600px) and (orientation: landscape) {
   .col-1 {
     width: 16.366666666666667%;
   }
@@ -240,19 +240,5 @@ i {
   }
   .row .col-2 ~ .col-10 {
     width: 49.7%;
-  }
-}
-@media all and (max-width: 960px) and (max-width: 800px) and (max-width: 640px) {
-  .col-1 {
-    width: 49.7%;
-  }
-  .col-2 {
-    width: 99.7%;
-  }
-  .row .col-2 ~ .col-4 {
-    width: 99.7%;
-  }
-  .row .col-2 ~ .col-10 {
-    width: 99.7%;
   }
 }
