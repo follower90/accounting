@@ -169,7 +169,7 @@ i {
   text-align: center;
   color: #000;
 }
-@media all and (max-width: 800px) {
+@media all and (max-width: 960px) {
   .col-1 {
     width: 8.033333333333333%;
   }
@@ -204,7 +204,7 @@ i {
     width: 83.03333333333335%;
   }
 }
-@media all and (max-width: 800px) and (max-width: 640px) {
+@media all and (max-width: 960px) and (max-width: 800px) {
   .col-1 {
     width: 16.366666666666667%;
   }
@@ -242,7 +242,7 @@ i {
     width: 49.7%;
   }
 }
-@media all and (max-width: 800px) and (max-width: 640px) and (max-width: 480px) {
+@media all and (max-width: 960px) and (max-width: 800px) and (max-width: 640px) {
   .col-1 {
     width: 49.7%;
   }
