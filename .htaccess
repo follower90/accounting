@@ -1,8 +1,8 @@
 AddDefaultCharset utf-8
 RewriteEngine on
 
-RewriteRule ^admin/api/(.*)/$ admin/api.php?method=$1 [QSA,L]
-RewriteRule ^admin/(.*)/$ admin/index.php [QSA,L]
+RewriteRule ^admin/api/(.*)$ admin/api.php?method=$1 [QSA,L]
+RewriteRule ^admin/(.*)$ admin/index.php [QSA,L]
 
 RewriteRule ^api/(.*)/$ api.php?method=$1 [QSA,L]
 
