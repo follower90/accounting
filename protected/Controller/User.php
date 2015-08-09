@@ -12,7 +12,7 @@ class User extends Base
 		$this->authorize->login($this->request('name'), $this->request('pass'),
 			function($password) {
 				return \Accounting\Object\User::hashPassword($password);
-			}
+			}, true
 		);
 
 		Router::redirect('/');
