@@ -9,6 +9,6 @@ RewriteRule ^api/(.*)/$ api.php?method=$1 [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|png|gif)$ [NC]
+RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|png|gif|svg|eot|ttf|woff)$ [NC]
 
 RewriteRule ^(.*)$ index.php [QSA,L]
