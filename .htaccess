@@ -1,14 +1,18 @@
 AddDefaultCharset utf-8
-RewriteEngine on
 
-RewriteRule ^admin/api/(.*)$ admin/api.php?method=$1 [QSA,L]
-RewriteRule ^admin/(.*)$ admin/index.php [QSA,L]
+<IfModule mod_rewrite.c>
+    RewriteEngine on
 
-RewriteRule ^api/(.*)/$ api.php?method=$1 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^admin/api/([^.]+)$ admin/api.php?method=$1 [QSA,L]
 
-RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|png|gif|svg|eot|ttf|woff)$ [NC]
+    RewriteRule ^admin/([^.]+)$ admin/index.php [L]
 
-RewriteRule ^(.*)$ index.php [QSA,L]
+    RewriteRule ^api/([^.]+)/$ api.php?method=$1 [L]
+
+    RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|png|gif|svg|eot|ttf|woff)$ [NC]
+    RewriteRule (.*) index.php [L]
+</IfModule>
