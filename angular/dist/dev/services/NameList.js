@@ -1,0 +1,15 @@
+var NamesList = (function () {
+    function NamesList() {
+        this.names = ['Dijkstra', 'Knuth', 'Turing', 'Hopper'];
+    }
+    NamesList.prototype.get = function () {
+        return this.names;
+    };
+    NamesList.prototype.add = function (value) {
+        this.names.push(value);
+    };
+    return NamesList;
+})();
+exports.NamesList = NamesList;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNlcnZpY2VzL05hbWVMaXN0LnRzIl0sIm5hbWVzIjpbIk5hbWVzTGlzdCIsIk5hbWVzTGlzdC5jb25zdHJ1Y3RvciIsIk5hbWVzTGlzdC5nZXQiLCJOYW1lc0xpc3QuYWRkIl0sIm1hcHBpbmdzIjoiQUFBQTtJQUFBQTtRQUNZQyxVQUFLQSxHQUFHQSxDQUFDQSxVQUFVQSxFQUFFQSxPQUFPQSxFQUFFQSxRQUFRQSxFQUFFQSxRQUFRQSxDQUFDQSxDQUFDQTtJQVE5REEsQ0FBQ0E7SUFOR0QsdUJBQUdBLEdBQUhBO1FBQ0lFLE1BQU1BLENBQUNBLElBQUlBLENBQUNBLEtBQUtBLENBQUNBO0lBQ3RCQSxDQUFDQTtJQUNERix1QkFBR0EsR0FBSEEsVUFBSUEsS0FBYUE7UUFDYkcsSUFBSUEsQ0FBQ0EsS0FBS0EsQ0FBQ0EsSUFBSUEsQ0FBQ0EsS0FBS0EsQ0FBQ0EsQ0FBQ0E7SUFDM0JBLENBQUNBO0lBQ0xILGdCQUFDQTtBQUFEQSxDQVRBLEFBU0NBLElBQUE7QUFUWSxpQkFBUyxZQVNyQixDQUFBIiwiZmlsZSI6InNlcnZpY2VzL05hbWVMaXN0LmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNsYXNzIE5hbWVzTGlzdCB7XG4gICAgcHJpdmF0ZSBuYW1lcyA9IFsnRGlqa3N0cmEnLCAnS251dGgnLCAnVHVyaW5nJywgJ0hvcHBlciddO1xuXG4gICAgZ2V0KCkge1xuICAgICAgICByZXR1cm4gdGhpcy5uYW1lcztcbiAgICB9XG4gICAgYWRkKHZhbHVlOiBzdHJpbmcpIHtcbiAgICAgICAgdGhpcy5uYW1lcy5wdXNoKHZhbHVlKTtcbiAgICB9XG59XG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
