@@ -17,8 +17,18 @@ class User extends \Core\Object\User
 					'default' => '',
 					'null' => false,
 				],
+				'categories' => [
+					'type' => 'HAS_MANY',
+					'class' => 'Category'
+				]
 			]);
 		}
+
+		\Core\Orm::registerRelation(
+			['type' => 'multiple', 'alias' => 'categories', 'table' => 'User__Category'],
+			['class' => 'User'],
+			['class' => 'Category']
+		);
 
 		return self::$_config;
 	}

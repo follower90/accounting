@@ -2,7 +2,7 @@
 
 namespace Accounting\Controller;
 
-use Core\Authorize;
+use Core\Object\User;
 use Core\Router;
 use Core\Orm;
 
@@ -29,33 +29,21 @@ class Profile extends Base
 
 	public function methodSave()
 	{
-		$this->db = \Core\Database\PDO::getInstance();
+		$password = trim($this->request('password'));
 
-		if (isset($_POST['save'])) {
-			$name = $_POST['name'];
-			$login = $_POST['login'];
-			$password = trim($_POST['password']);
-			$user_id = $this->user->getId();
+		$user = User::find($this->user->getId());
+		$user->setValues([
+			'name' => $this->request('name'),
+			'login' => $this->request('login'),
+		]);
 
-			$this->db->query("UPDATE `users` SET `name`=?, `login`=? WHERE `id`=?", array($name, $login, $user_id));
+		$user->setValue('categories', $this->request('categories'));
 
-			if ($password != '') {
-				$this->db->query("UPDATE `users` SET `password`=? WHERE `id`=?", array(md5($password), $user_id));
-			}
-
-			$this->db->query("DELETE FROM `user_categories` WHERE `user_id`=?", array($user_id));
-
-			foreach ($_POST['categories'] as $row) {
-				$this->db->query("INSERT INTO `user_categories` SET `category_id`=?, `user_id`=?", array($row, $user_id));
-			}
-
-			$vars['message'] = '<div class="success">Профиль обновлён</div><br/>';
+		if ($password != '') {
+			$user->setValue('password', md5($password));
 		}
 
-		$vars['user'] = $this->db->row("SELECT `login`,`name` FROM `users` WHERE `id`=?", array($user_id));
-		$vars['categories'] = $this->db->rows("SELECT * FROM `Category`");
-		$vars['my_categories'] = $this->db->rows("SELECT `category_id` as 'id' FROM `user_categories` WHERE `user_id`=?", array($user_id));
-
+		$user->save();
 		Router::redirect('/profile');
 	}
 }

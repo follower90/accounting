@@ -25,6 +25,10 @@ class Category extends \Core\Object
 					'default' => '',
 					'null' => false,
 				],
+				'user' =>[
+					'type' => 'BELONGS_TO',
+					'class' => 'User'
+				]
 			]);
 		}
 

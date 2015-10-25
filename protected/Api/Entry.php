@@ -12,7 +12,7 @@ class Entry extends Api
 	public function __construct()
 	{
 		if (!$this->user = App::getUser()) {
-			throw new \Exception('Not authorized');
+			Api::notAuthorized();
 		}
 	}
 
