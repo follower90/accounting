@@ -3,9 +3,7 @@
 namespace Accounting\Controller;
 
 use Accounting\Object\Category;
-use Core\Object\User;
 use Core\Router;
-use Core\Orm;
 
 class Profile extends Base
 {

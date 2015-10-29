@@ -2,9 +2,14 @@
 
 namespace Accounting\Controller;
 
-use Core\Orm;
+use Accounting\Object\Category;
 use Core\Router;
 
+/*
+ * todo
+ * Refacor it ASAP
+ * Govnokod
+ */
 class Index extends Base
 {
 	public function methodIndex()
@@ -12,44 +17,51 @@ class Index extends Base
 		$data = [];
 		$data['content'] = '';
 
-		if ($this->user) {
-			$vars['categories'] = Orm::find('Category', ['user.User'], [$this->user->getId()], ['sort' => ['id', 'asc']])->getHashMap('id', 'name');
-			$vars['new_entry'] = $this->view->render('public/templates/new_entry.phtml', $vars);
-
-			$month = $this->request('month');
-			$year = $this->request('year');
-
-			if ($month && $year) {
-				$dateFrom = $year . '-' . $month . '-01';
-				$dateTo = $year . '-' . $month . '-31';
-				$vars['archiveDate'] = \Core\Library\Date::getMonth($month) . ' ' . $year;
-			} else {
-				$dateFrom = date("Y-m") . '-01';
-				$dateTo = date("Y-m") . '-31';
-			}
-
-			$entries = $this->execute('Accounting.Api.Entry:list', ['from' => $dateFrom, 'to' => $dateTo]);
-			$vars['entries_table'] = $this->view->render('public/templates/entries_table.phtml', ['entries' => $entries, 'categories' => $vars['categories']]);
-
-			$vars['getThisMonth'] = $this->monthSummary($entries, '+');
-			$vars['spentThisMonth'] = $this->monthSummary($entries, '-');
-
-			$vars['statSpentYear'] = $this->resultsByYear('-');
-			$vars['statGotYear'] = $this->resultsByYear('+');
-
-			$vars['catstats'] = $this->stats($dateFrom, $dateTo);
-			$vars['best'] = $this->bestMonth();
-
-			$stats = $this->getStats();
-
-			$vars['statGot'] = $stats['got'];
-			$vars['statSpent'] = $stats['spent'];
-
-			$vars['statSpentJSON'] = $this->toJSON($stats['spentRaw']);
-			$vars['statGotJSON'] = $this->toJSON($stats['gotRaw']);
-
-			$data['content'] = $this->view->render('public/templates/main.phtml', $vars);
+		if (!$this->user) {
+			return false;
 		}
+
+		$vars['categories'] = Category::all()
+			->addFilter('user.User', $this->user->getId())
+			->setSorting('id')
+			->load()
+			->getHashMap('id', 'name');
+
+		$vars['new_entry'] = $this->view->render('public/templates/new_entry.phtml', $vars);
+
+		$month = $this->request('month');
+		$year = $this->request('year');
+
+		if ($month && $year) {
+			$dateFrom = $year . '-' . $month . '-01';
+			$dateTo = $year . '-' . $month . '-31';
+			$vars['archiveDate'] = \Core\Library\Date::getMonth($month) . ' ' . $year;
+		} else {
+			$dateFrom = date("Y-m") . '-01';
+			$dateTo = date("Y-m") . '-31';
+		}
+
+		$entries = $this->execute('Accounting.Api.Entry:list', ['from' => $dateFrom, 'to' => $dateTo]);
+		$vars['entries_table'] = $this->view->render('public/templates/entries_table.phtml', ['entries' => $entries, 'categories' => $vars['categories']]);
+
+		$vars['getThisMonth'] = $this->monthSummary($entries, '+');
+		$vars['spentThisMonth'] = $this->monthSummary($entries, '-');
+
+		$vars['statSpentYear'] = $this->resultsByYear('-');
+		$vars['statGotYear'] = $this->resultsByYear('+');
+
+		$vars['catstats'] = $this->stats($dateFrom, $dateTo);
+		$vars['best'] = $this->bestMonth();
+
+		$stats = $this->getStats();
+
+		$vars['statGot'] = $stats['got'];
+		$vars['statSpent'] = $stats['spent'];
+
+		$vars['statSpentJSON'] = $this->toJSON($stats['spentRaw']);
+		$vars['statGotJSON'] = $this->toJSON($stats['gotRaw']);
+
+		$data['content'] = $this->view->render('public/templates/main.phtml', $vars);
 
 		return $this->render($data);
 	}
