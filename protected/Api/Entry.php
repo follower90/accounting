@@ -36,12 +36,9 @@ class Entry extends Api
 
 	public function methodSave($args)
 	{
-
-		if ($args['id']) {
-			$entry = Orm::load('Entry', $args['id']);
-		} else {
-			$entry = Orm::create('Entry');
-		}
+		$entry = ($args['id'])
+			? Orm::load('Entry', $args['id'])
+			: Orm::create('Entry');
 
 		$entry->setValues([
 			'date' => date('Y-m-d', strtotime($args['date'])),
@@ -76,5 +73,7 @@ class Entry extends Api
 			Orm::delete($entry);
 			return true;
 		}
+
+		return false;
 	}
 }
