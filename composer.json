@@ -3,6 +3,8 @@
     "follower/core": "dev-master",
     "follower/admin": "dev-master"
   },
+  "require-dev": {
+  },
   "autoload": {
     "classmap": [
       "vendor/follower/core/backend",
