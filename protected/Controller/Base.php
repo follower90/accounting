@@ -19,16 +19,16 @@ class Base extends Controller
 		parent::__construct();
 	}
 
-	public function render($data)
+	public function render($data = [])
 	{
 		$data['title'] = 'Моя бухгалтерия 2.0';
 
 		if ($this->user) {
-			$data['usermenu'] = $this->view->render('public/templates/user/authorized.phtml', ['name' => $this->user->getValue('name')]);
+			$data['usermenu'] = $this->view->render('user/authorized.phtml', ['name' => $this->user->getValue('name')]);
 		} else {
-			$data['usermenu'] = $this->view->render('public/templates/user/login.phtml');
+			$data['usermenu'] = $this->view->render('user/login.phtml');
 		}
 
-		return $this->view->render('public/templates/layout.phtml', $data);
+		return $this->view->render('layout.phtml', $data);
 	}
 }

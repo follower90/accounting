@@ -6,3 +6,4 @@ config.php
 node_modules
 vendor
 public/compiled
+temp

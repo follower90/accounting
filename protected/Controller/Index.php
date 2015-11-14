@@ -2,6 +2,7 @@
 
 namespace Accounting\Controller;
 
+use Accounting\Api\User;
 use Accounting\Object\Category;
 use Core\Router;
 
@@ -18,7 +19,7 @@ class Index extends Base
 		$data['content'] = '';
 
 		if (!$this->user) {
-			return false;
+			return $this->main();
 		}
 
 		$vars['categories'] = Category::all()

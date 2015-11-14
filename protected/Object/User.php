@@ -37,4 +37,9 @@ class User extends \Core\Object\User
 	{
 		return md5($password);
 	}
+
+	public static function desc()
+	{
+		return static::all()->setSorting('id', 'desc');
+	}
 }
