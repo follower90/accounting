@@ -19,7 +19,7 @@ class Index extends Base
 		$data['content'] = '';
 
 		if (!$this->user) {
-			return $this->main();
+			return $this->render();
 		}
 
 		$vars['categories'] = Category::all()
