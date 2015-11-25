@@ -1,7 +1,8 @@
 {
   "require": {
     "follower/core": "dev-master",
-    "follower/admin": "dev-master"
+    "follower/admin": "dev-master",
+    "phpunit/phpunit": "^4.8"
   },
   "require-dev": {
   },
