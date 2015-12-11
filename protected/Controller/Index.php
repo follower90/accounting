@@ -13,6 +13,19 @@ use Core\Router;
  */
 class Index extends Base
 {
+	public function methodTest($params)
+	{
+		\Core\Library\System::dump([
+			'branch1' => [
+
+				'sub_branch1' => ['a', 'b', 'c', 'd'],
+				'sub_branch2' => 'string',
+			],
+			'branch2' => []
+			]);
+		\Core\Library\System::dump($params);
+	}
+
 	public function methodIndex()
 	{
 		$data = [];

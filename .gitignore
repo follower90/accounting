@@ -1,5 +1,6 @@
 dist
-.idea
+/nbproject
+/.idea
 .DS_Store
 composer.lock
 config.php

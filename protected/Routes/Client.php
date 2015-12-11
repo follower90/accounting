@@ -8,12 +8,15 @@ class Client
 {
 	public static function register()
 	{
-		Router::register(['/add', 'post'], 'Index', 'newEntry', []);
-		
-		Router::register(['/login', 'post'], 'User', 'login', []);
-		Router::register(['/logout', 'get'], 'User', 'logout', []);
+		$router = new Router();
+		$router
+			->route('POST', '/add', 'index#newEntry')
 
-		Router::register(['/profile', 'get'], 'Profile', 'index', []);
-		Router::register(['/profile', 'post'], 'Profile', 'save', []);
+			->route('POST', '/login', 'user#login')
+			->route('GET', '/logout', 'user#logout')
+
+			->route('GET', '/profile', 'profile#index')
+			->route('POST', '/profile', 'profile#save')
+			->route('GET', '/test/:id/action/:action', 'index#test');
 	}
 }
