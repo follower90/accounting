@@ -22,7 +22,12 @@ var saveEntry = function (id) {
 	var cat = $('#types-edit-' + id + ' :selected').val();
 
 	$.ajax({
-		type: "POST", url: "/api.php?method=Entry.save", dataType: "json", data: {name: name, date: date, sum: sum, cat: cat, id: id}, cache: false, success: function (data) {
+		type: "POST",
+		url: "/api.php?method=Entry.save",
+		dataType: "json",
+		data: {name: name, date: date, sum: sum, cat: cat, id: id},
+		cache: false,
+		success: function (data) {
 			$('#tr-' + id).refreshEntry(id);
 			editEntry(id);
 		}
@@ -38,7 +43,11 @@ var deleteEntry = function (id) {
 	if (confirm('Вы уверены что хотите удалить?')) {
 		var dataString = 'id=' + id;
 		$.ajax({
-			type: "POST", url: "/api.php?method=Entry.delete", data: dataString, cache: false, success: function (data) {
+			type: "POST",
+			url: "/api.php?method=Entry.delete",
+			data: dataString,
+			cache: false,
+			success: function (data) {
 				$('#tr-' + id).fadeOut('slow');
 			}
 		});
@@ -60,7 +69,6 @@ $.fn.refreshEntry = function (id) {
 			if (elem.hasClass(cl)) {
 				cl = 'tr-even';
 			}
-			console.log(data);
 
 			var image = '<img src="/public/images/plus.png" alt="">';
 			if (data.category.type == '-') {
