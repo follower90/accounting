@@ -50,7 +50,7 @@ class Entry extends Api
 
 		Orm::save($entry);
 
-		return ['success' => true, 'data' => $entry->getValues()];
+		return ['success' => true, 'data' => $this->execute('Accounting.Api.Entry:get', ['id' => $entry->getId()])];
 	}
 
 

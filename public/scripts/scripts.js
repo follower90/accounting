@@ -1,7 +1,4 @@
 $(document).ready(function () {
-	$('table tbody tr:even').addClass('tr-even');
-	$('table tbody tr:odd').addClass('tr-odd');
-
 	$('.datepicker').datepicker({
 		format: 'dd.mm.yyyy',
 		weekStart: 1
@@ -21,6 +18,9 @@ var saveEntry = function (id) {
 	var sum = $('#sum-edit-' + id).val();
 	var cat = $('#types-edit-' + id + ' :selected').val();
 
+	editEntry(id);
+	toggleLoader(id);
+
 	$.ajax({
 		type: "POST",
 		url: "/api.php?method=Entry.save",
@@ -29,9 +29,12 @@ var saveEntry = function (id) {
 		cache: false,
 		success: function (data) {
 			$('#tr-' + id).refreshEntry(id);
-			editEntry(id);
 		}
 	});
+};
+
+var toggleLoader = function(id) {
+	$('#tr-' + id).toggleClass('loading');
 };
 
 var editEntry = function (id) {
@@ -65,21 +68,19 @@ $.fn.refreshEntry = function (id) {
 		cache: false,
 		success: function (data) {
 			var elem = $('#tr-' + id);
-			var cl = 'tr-odd';
-			if (elem.hasClass(cl)) {
-				cl = 'tr-even';
-			}
 
-			var image = '<img src="/public/images/plus.png" alt="">';
-			if (data.category.type == '-') {
-				image = '<img src="/public/images/minus.png" alt="">';
-			}
+			data = data.response;
+			var image = '<img src="/public/images/' + ((data.category.type == '+') ? 'plus' : 'minus') + '.png" alt="">';
 
-			$('#tr-' + id + ' .icon-edit').html(image);
-			$('#tr-' + id + ' .date-edit').html(data.date);
-			$('#tr-' + id + ' .name-edit').html(data.name);
-			$('#tr-' + id + ' .type-edit').html(data.category.name);
-			$('#tr-' + id + ' .sum-edit').html(data.sum + ' ₴');
+			$.each(['#tr-' + id, '#tr-' + id + '-edit'], function(i, item) {
+				$(item).find('.icon-edit').html(image);
+				$(item).find('.date-edit').html(data.date);
+				$(item).find('.name-edit').html(data.name);
+				$(item).find('.type-edit').html(data.category.name);
+				$(item).find('.sum-edit').html(data.sum + ' ₴');
+			});
+
+			toggleLoader(id);
 		}
 	});
 };

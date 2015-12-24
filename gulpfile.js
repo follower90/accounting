@@ -46,7 +46,7 @@ gulp.task('scripts', function () {
 
 	return gulp.src(paths.scripts)
 		.pipe(concat('scripts.js'))
-		.pipe(uglify())
+		//.pipe(uglify())
 		.pipe(gulp.dest(paths.compiled));
 });
 

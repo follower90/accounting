@@ -6424,6 +6424,12 @@ body {
 .minus {
 	color: #f00000;
 }
+.loading {
+	opacity: 0.5;
+}
+.loading a {
+	display: none;
+}
 #content {
 	padding: 5px;
 }
@@ -6452,12 +6458,6 @@ body {
 }
 .year-table .table td {
 	font-size: 13px;
-}
-.tr-even {
-	background: #f2fbfb;
-}
-.tr-odd {
-	background: #ebf3f3;
 }
 #add-form {
 	position: relative;
